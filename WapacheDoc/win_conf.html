@@ -1,0 +1,1128 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item"><a href="server_conf.html">Server Directives</a></div>
+			
+			<div class="left_item"><a href="client_conf.html">Client Directives<a/></div>
+			
+			<div class="left_item">Window Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#3DBorder">3DBorder</a></div>
+				<div class="left_sub_item">&#8226; <a href="#AnchorContextMenu">AnchorContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#AutoComplete">AutoComplete</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Bottom">Bottom</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ControlContextMenu">ControlContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DefaultContextMenu">DefaultContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DropDownMenu">DropDownMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ClientHeight">ClientHeight</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ClientWidth">ClientWidth</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DialogBox">&lt;DialogBox&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#FlatScrollBar">FlatScrollBar</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Frameless">Frameless</a></div>
+				<div class="left_sub_item">&#8226; <a href="#FullScreen">FullScreen</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Height">Height</a></div>
+				<div class="left_sub_item">&#8226; <a href="#HelpButton">HelpButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#HorizontalAlign">HorizontalAlign</a></div>
+				<div class="left_sub_item">&#8226; <a href="#IconPath">IconPath</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ImageContextMenu">ImageContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#InnerBorder">InnerBorder</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Left">Left</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MaximizeButton">MaximizeButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Maximized">Maximized</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MinimizeButton">MinimizeButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Modal">Modal</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Resizeable">Resizeable</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Right">Right</a></div>
+				<div class="left_sub_item">&#8226; <a href="#RoundedCorners">RoundedCorners</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScrollBar">ScrollBar</a></div>
+				<div class="left_sub_item">&#8226; <a href="#StandardWindow">&lt;StandardWindow&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SystemMenu">SystemMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#TextSelectionContextMenu">TextSelectionContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ToolWindow">&lt;ToolWindow&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Top">Top</a></div>
+				<div class="left_sub_item">&#8226; <a href="#VerticalAlign">VerticalAlign</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Width">Width</a></div>
+			</div>
+
+			<div class="left_item"><a href="menu_conf.html">Menu Directives</a></div>
+			
+			<div class="left_item"><a href="sticon_conf.html">System Tray Directives</a></div>			
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<p>These directives control the appearance and behavior of a browser window. They always appear in directive blocks enclosed by one of following tags: <code>&lt;StandardWindow&gt;</code>, <code>&lt;ToolWindow&gt;</code>, or <code>&lt;DialogBox&gt;</code>. The tags themselves indicate the window type.</p>
+
+			<p>Each directive block is associated with a name pattern, specified in the open tag. Wapache apply a block to a given window if the name of that window matches the pattern. In the following example, both "popup_warning" and "popup_error" will use the settings in the <code>&lt;ToolWindow&gt;</code> block, while only "main" will use the <code>&lt;StandardWindow&gt;</code> block:</p>
+
+			<div class="example">
+				&lt;StandardWindow "main"&gt;<br>
+				&nbsp;&nbsp;Width 80%<br>
+				&nbsp;&nbsp;Height 80%<br>
+				&lt;/StandardWindow&gt;<br>
+				<br>
+				&lt;ToolWindow "popup_.*"&gt;<br>
+				&nbsp;&nbsp;Width 2in<br>
+				&nbsp;&nbsp;Height 4in<br>
+				&lt;/ToolWindow&gt;<br>
+			</div>
+
+			<div class="main_heading"><a name="Window_Types">Window Types</a></div>
+
+			<p><img src="std_win.png" align="right">A <b>Standard Window</b> behaves like a regular browser window. The user can maximize, minimize, and resize it (unless these features are explicitly turned off). For every standard window there is a button in the Task Bar. Each one also gets a slot in the Task Switch (Alt-Tab) window.<br clear="all"></p>			
+
+			<p><img src="tool_win.png" align="right">A <b>Tool Window</b> has a more diminative title bar than regular windows. It can not be maximized or minimized and usually are not resizeable. It also does not have an icon for activating the system menu. Tool windows are designed for floating tool bars and for displaying information supplemental to contents in a Standard Window. It is "owned" by the window that opened it. When the opener closes, so does the tool window. When the opener is minimized, the tool window becomes hidden. When a tool window has the keyboard focus, its opener will still appear to be active. In essence, a tool window is an extended part of a standard window.<br clear="all"></p>
+
+			<p><img src="dialog_box.png" align="right">Like a Tool Window, a <b>Dialog Box</b> is also an owned window. It will close when its opener closes. A Dialog Box can be modeless and modal. A modal Dialog Box does not yield control back to its opener until the user closes it.<br clear="all"></p>
+
+			<p>Both Tool Windows and Dialog Boxes will always appear in front of their openers.</p>
+
+			<div class="main_heading"><a name="Window_Placement">Window Placement</a></div>
+
+			
+			<p>There are two ways to specify the size of a window. You supply the actual size of the window using the <a href="#Width">Width</a> and <a href="#Height">Height</a> directives, or you can specify the size of the document view using the <a href="#ClientWidth">ClientWidth</a> and <a href="#ClientHeight">ClientHeight</a> directives (see figure below). The second pair is useful when the HTML contents to be displayed have a a fixed pixel size.<div align="center"><img src="win_size.png"></div></p> 
+			
+			<p>The dimensions can be specified in number of pixels (px), number of scaled pixels (sx), inches (in), or percentage.</p>
+
+			<p>A scaled pixel is the length of a pixel at Windows's default resolution of 96 DPI (dots per inch)&ndash;i.e. 1/96 of an inch. If the end user's display device has a higher resolution, Wapache would adjust the dimensions of the window so that it is of roughly the same size on screen as it were at 96 DPI.</p>
+
+			<p>When specifying dimensions in inches, you must provide integers. Wapache does not recognize numbers with decimals. For finer control, use the scaled pixel.</p>
+
+			<p>Dimensions specified in percentage are calculated based on the width and height of the desktop area&ndash;that is, the screen area minus the Windows Task Bar.</p>
+
+			<p>Four directives are available for specifying the location of a window: <a href="#Left">Left</a>, <a href="#Top">Top</a>, <a href="#Right">Right</a>, and <a href="#Bottom">Bottom</a>. Most of the time you would not be using all four. You would just specify the window's height and width and then the location of one of its corners.</p>
+
+			<p>The figures given in these directives are not screen coordinates. They are offsets from the window's <i>offset rectangle</i>. The offset rectangle for a Standard Window is the desktop area. The offset rectangle for a Tool Window or a Dialog Box is the area occupied by its opener (or the desktop area if it was not opened from another window).</p>
+
+			<p>The <a href="#HorizontalAlign">HorizontalAlign</a> and <a href="#VerticalAlign">VerticalAlign</a> directives affect how the figures are interpreted. When HorizontalAlign is set to "Left," they are distances from the left edge of the offset rectangle: <div align="center"><img src="left_align.png"></div></p> 
+
+			<p>When HorizontalAlign is "Right," they are distances from the right edge of the offset rectangle: <div align="center"><img src="right_align.png"></div></p>
+
+			<p>When HorizontalAlign is "Center," both Left and Right are ignored. Wapahce will simply center the window in the offset rectangle.</p>
+
+			<p>The effect of VerticalAlign on Top and Bottom are analogous. When VerticalAlign is "Top": <div align="center"><img src="top_align.png"></div></p>
+
+			<p>When VerticalAlign is "Bottom": <div align="center"><img src="bottom_align.png"></div></p>
+
+			<p>You would always place Standard Windows inside its offset rectangle. Otherwise it would be outside the desktop area and not be visible. The offset rectangle of a Tool Window, on the other hand, is the area of its opener. In this case you might want to position the window outside of its offset rectangle, so the windows do not overlap. For that you need to use negative numbers. The following example places a Tool Window next to a Standard Window, 5 pixels away and 10 pixels lower:
+
+			<div align="center"><img src="align_example.png"></div>
+
+			<div class="example">
+				&lt;ToolWindow "tools"&gt;<br>
+				&nbsp;&nbsp;HorizontalAlign Right<br>
+				&nbsp;&nbsp;VerticalAlign Top<br>
+				&nbsp;&nbsp;Left -5px<br>
+				&nbsp;&nbsp;Top 10px<br>
+				&nbsp;&nbsp;Left 5px<br>
+				&nbsp;&nbsp;Width 220px<br>
+				&nbsp;&nbsp;Height 100px<br>
+				&lt;/ToolWindow&gt;<br>				
+			</div>
+
+			<p>Changing HorizontalAlign to "Left" and setting Right to -5px would place the Tool Window on the other side.</p>
+
+			<p>When <a href="#FullScreen">FullScreen</a> is turned on, all window placement directives are ignored&ndash;the window will simply fill up the whole screen.</p>
+
+			<div class="main_heading"><a name="Custom_Window_Frame">Custom Window Frame</a></div>
+
+			<p>You can give your application a more unique appearance with a custom window frame. First, turn off the system window frame with the <a href="#Frameless">Frameless</a> directive, leaving only the HTML document visible on screen. Then create then custom frame within the HTML document, using a combination of CSS, Javascript, and images.</p>
+
+			<p>Example:<div align="center"><img src="custom_frame.png"></div></p>
+
+			<div class="example">
+				&lt;StandardWindow Main&gt;<br>
+				&nbsp;&nbsp;Left 10%<br>
+				&nbsp;&nbsp;Top 10%<br>
+				&nbsp;&nbsp;Height 100px<br>
+				&nbsp;&nbsp;Width 220px<br>
+				&nbsp;&nbsp;Frameless On<br>
+				&nbsp;&nbsp;ScrollBar Off<br>
+				&nbsp;&nbsp;3DBorder Off<br>
+				&nbsp;&nbsp;RoundedCorners 10px<br>
+				&lt;/StandardWindow&gt;
+			</div>
+
+			<p>Use the scripting methods exposed through the <a href="external.html">External Object</a> to implement features normally provided by the system window frame, such as minimizing, maximizing, and moving.</p>
+
+			<div class="main_heading"><a name="3DBorder">3DBorder</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether a 3-D border appears around browser frames</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">3DBorder On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">3DBroder On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The 3DBorder directive turns off 3-D borders for all frames (iframes included). Use the <a href="#InnerBorder">InnerBorder</a> to turn off the border around the main document.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="AnchorContextMenu">AnchorContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on a hyperlink</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AnchorContextMenu <i>menu-name</i>|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AnchorContextMenu (IE menu)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>Normally when the user right-clicks on a hyperlink, Internet Explorer's hyperlink context menu appears, with the options to "Open in New Window," "Save Target As," and so on. The AnchorContextMenu directive lets you supply a custom menu tailored to your application.</p>
+			<p>The <i>menu-name</i> argument refers to a <a href="menu_conf.html#Menu">&lt;Menu&gt;</a> directive block, where the menu items are defined.</p>
+
+			<div class="note"><b>Javascript:</b> Menu items are not context aware at the DOM level. A <a href="#ScriptMenuItem">ScriptMenuItem</a>, for example, will always invoke a method of the <code>window</code> object, even in this case, when context menu was opened for a specific element. If the action performed is element specific, attach a handler to the <code>oncontextmenu</code> event and save a reference to <code>event.srcElement</code> in a global variable.</div>
+
+			<div class="main_heading"><a name="AutoComplete">AutoComplete</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether AutoComplete is active</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AutoComplete On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AutoComplete Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>Microsoft's Intelliforms&trade; technology aids users in filling out forms in Internet Explorer. The AutoComplete directive determine whether this feature is available in a Wapache browser window as well.</p>
+			<p><span class="dev_note">Need to confirm behavior; might not work at all. - Chung</span></p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="Bottom">Bottom</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Sets the bottom position of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Bottom <i>distance</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Bottom (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+
+			<p>The Bottom directive is used to set the bottom position of a window. If <a href="#VerticalAlign">VerticalAlign</a> is "Bottom," <i>distance</i> is interpreted as that from the bottom of the window to the bottom of its offset rectangle. If VerticalAlign is "Top," then it is the distance from the bottom the window to the top of its offset rectangle.</p>
+
+			<p>For Standard Windows, the offset rectangle is the desktop area. For Tool Windows and Dialog Boxes, it is the area occupied by the opener window.</p>
+
+			<p>Pixel length is assumed if no unit is specified.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p> 
+
+			<div class="main_heading"><a name="ControlContextMenu">ControlContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on a form input field</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ControlContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ControlContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>Normally when the user right-clicks on a input field, the standard edit context menu appears, with the options to "Copy," "Paste," and so on. The ControlContextMenu directive lets you supply a your own solution.</p>
+
+			<p>The <i>menu-name</i> argument refers to a <a href="menu_conf.html#Menu">&lt;Menu&gt;</a> directive block, where the menu items are defined. You must provide definition for every item in this menu. There is no way to add an item to the existing menu. The directive block for the standard edit menu is shown below.</p>
+
+			<div class="example">
+				&lt;Menu edit&gt;<br>
+				&nbsp;&nbsp;BasicMenuItem "Undo" _this IDM_UNDO<br>
+				&nbsp;&nbsp;MenuSeparator<br>
+				&nbsp;&nbsp;BasicMenuItem "Cut" _this IDM_CUT<br>
+				&nbsp;&nbsp;BasicMenuItem "Copy" _this IDM_COPY<br>
+				&nbsp;&nbsp;BasicMenuItem "Paste" _this IDM_PASTE<br>
+				&nbsp;&nbsp;BasicMenuItem "Delete" _this IDM_DELETE<br>
+				&nbsp;&nbsp;MenuSeparator<br>
+				&nbsp;&nbsp;BasicMenuItem "Select All" _this IDM_SELECTALL<br>
+				&lt;/Menu&gt;			
+			</div>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DefaultContextMenu">DefaultContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on an element that is neither a hyperlink, image, or input field</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DefaultContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The DefaultContextMenu directive sets the context menu for elements that do not require a more specialized  menu. The following table lists those that do with the coresponding directive.</p>
+			<table border="1" cellpadding="4" class="note" style="border-collapse: collapse; border-color: #444444">
+				<tr>
+					<td style="border-color: #444444">Hyperlinks</td>
+					<td style="border-color: #444444"><a href="#AnchorContextMenu">AnchorContextMenu</a></td>
+				</tr>
+				<tr>
+					<td style="border-color: #444444">Images</td>
+					<td style="border-color: #444444"><a href="#ImageContextMenu">ImageContextMenu</a></td>
+				</tr>
+				<tr>
+					<td style="border-color: #444444">Input Fields</td>
+					<td style="border-color: #444444"><a href="#ControlContextMenu">ControlContextMenu</a></td>
+				</tr>
+				<tr>
+					<td style="border-color: #444444">Selected Text</td>
+					<td style="border-color: #444444"><a href="#TextSelectionContextMenu">TextSelectionContextMenu</a></td>
+				</tr>
+			</table>
+
+			<p><i>menu-name</i> refers to a <a href="menu_conf.html#Menu">&lt;Menu&gt;</a> directive block, which contains the menu item definitions</p>
+
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="DropDownMenu">DropDownMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Specifies a menu to be used as the window's drop-down menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DropDownMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DropDownMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The DropDownMenu directive assigns a menu to a window. Top level items will appear across the top of the window. <a href="menu_conf.html#Submenu">Submenus</a> will drop down from this menu bar.</p>
+
+			<p><i>menu-name</i> refers to a <a href="menu_conf.html#Menu">&lt;Menu&gt;</a> directive block, where the menu items are defined.</p>
+
+			<div class="main_heading"><a name="ClientHeight">ClientHeight</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window excluding the title bar, menu, and border&ndash;i.e. the height of the document view</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ClientHeight <i>length</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ClientHeight (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The ClientHeight directive lets you specify the desired height of the HTML document view port. Wapache would then calculate the necessary height the window should have in order to accommadate it. This is an alternative to the <a href="#Height">Height</a> directive, which sets the actual height of the window.</p>
+
+			<p>If not unit is given, pixel length is assumpted</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<div class="main_heading"><a name="ClientWidth">ClientWidth</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window excluding its border&ndash;i.e. the width of the document view</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ClientWidth <i>length</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ClientWidth (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The ClientWidth directive lets you specify the desired width of the HTML document view port. Wapache would then calculate the necessary width the window must have in order to accommadate it. This is an alternative to the <a href="#Width">Width</a> directive, which sets the actual width of the window.</p>
+
+			<p>If not unit is given, pixel length is assumpted</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DialogBox">&lt;DialogBox&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window and indicates that should behave like a dialog box</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;DialogBox <i>name-regex</i>&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>DialogBox is a container for directives that affect the appearance and behavior of a web browser window.</p>
+
+			<p><i>name-regex</i> is a regular expression. Directives in the block are applied to a window if its name matches the pattern. A match in this case means the full name must fit the pattern. This is constrast to how regular expressions are normally used in Apache, where a pattern would only need to macth some portion of the test string. Wapache automatically adds the start-of-string (^) and end-of-string ($) meta-character to the pattern. You need to put wildcard meta-character in the pattern if you wish to use the same directive block for different windows.</p>
+
+			<p>By default a Dialog Box is modeless.</p>
+
+			<p>See <a href="#Window_Types">Window Types</a> for more information.</p>
+
+
+
+			<div class="main_heading"><a name="FlatScrollBar">FlatScrollBar</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether scroll bars in the web browser window look flat</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">FlatScrollBar On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">FlatScrollBar Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The FlatScrollBar directive makes the scroll bars a flatter. They will still have a slight 3-D appearance.</p>
+
+			<div class="main_heading"><a name="Frameless">Frameless</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window should be frameless</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Frameless On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Frameless Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The Frameless directive turns off the default window frame provided by the operation system. A flameless window shows just the document view port. You are expected to provide a frame in the HTML document, at well as implement missing functionalities like window moving and closing in Javascript.</p>
+
+			<p>Use the <a href="#RoundedCorners">RoundedCorners</a> to round off the window's sharp corners.</p>
+
+			<p>While it is possible to add a drop-down menu to a frameless window, it is not recommended&ndash;it would look stupid.</p>
+
+			<p>Currently it is not possible for the user to resize a frameless window. The <a href="#Resizeable">Resizeable</a> directive is ignored when Frameless is on.</p>
+
+			<p><a href="#MaximizeButton">MaximizeButton</a>, <a href="#MinimizeButton">MinimizeButton</a>, and <a href="#HelpButton">HelpButton</a> are also ignored. <a href="#SystemMenu">SystemMenu</a> still has an effect, however, as the system menu is available through the Task Bar.</p>
+
+			<p>For an example, see the <a href="#Custom_Window_Frame">Custom Window Frame</a> section.</p>
+
+			<div class="main_heading"><a name="FullScreen">FullScreen</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window should take up the space of the entire screen</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">FullScreen On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">FullScreen Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The FullScreen directive makes a window fill up the whole screen. When it is set to On, all window positioning directives are ignored.</p>
+
+			<p>If the window has a <a href="#DropDownMenu">drop down menu</a>, it will apppear at the top of the screen.</p>
+
+			<p>You should provide a way for the user to close the window, as the standard close button will not be available.</p>
+
+			<p>Currently it is not possible to switch between full-screen and non-full-screen operation.</p>
+
+			<div class="main_heading"><a name="Height">Height</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window, including the frame</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Height <i>length</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Height (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The Height directive sets the actual height of the window. This height includes the height of the the title bar and that of the menu bar if one is present. Depending on the font settings, Windows version, and current GUI theme, the height of the document view can vary between computers. Consider using the <a href="#ClientHeight">ClientHeight</a> directive instead, if it is desirable to maintain a consistent view port size.</p>
+
+			<p>If not unit is specified, pixel length is assumed.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<div class="main_heading"><a name="HelpButton">HelpButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window has a help button in the title bar</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">HelpButton On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">HelpButton Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The HelpButton directive places a button with a question mark on the window's title bar. When the user clicks on it, the mouse cursor becomes a pointer with a question mark. When he/she clicks on an element in the HTML document, an <code>onhelp</code> event is fired on that element.</p>
+
+			<div class="main_heading"><a name="HorizontalAlign">HorizontalAlign</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Affects how other window positioning directives are interpreted</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">HorizontalAlign Left|Center|Right</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Left</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Left</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Center</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The HorizontalAlign directive changes the meanings of <a href="#Left">Left</a> and <a href="#Right">Right</a>. See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<p>Note that the default value for DialogBox is "Center," while it is "Left" for the other two window types</p>
+
+			<div class="main_heading"><a name="IconPath">IconPath</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Path to icon file used by the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">IconPath <i>ico-file-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">IconPath (Windows default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The icon path is relative to the directory path of the configuration file.</p>
+			<p>Currently only .ICO files can be used.</p>
+
+			<div class="main_heading"><a name="ImageContextMenu">ImageContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user clicks on an image</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ImageContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ImageContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="InnerBorder">InnerBorder</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the embedded web browser has a border</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">InnerBorder On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">InnerBorder On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The InnerBorder directive can be used to turn off the border around the HTML document view. If the document has frames, they will retain their borders&ndash;in contrast with the <a href="#3DBorder">3DBorder</a> directive, which turns off all borders.</p>
+			<div class="note"><b>Platform note:</b> This directive only works if Internet Explorer 6 and above is install on the end user's computer.</div> 
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Left">Left</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Sets the left position of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Left <i>distance</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left (undefined)</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left 0px</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left 0px</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The Left directive is used to set the left position of a window. If <a href="#HorizontalAlign">HorizontalAlign</a> is "Left," <i>distance</i> is interpreted as that from the left of the window to the left of its offset rectangle. If HorizontalAlign is "Right," then it is the distance from the left the window to the right of its offset rectangle.</p>
+
+			<p>For Standard Windows, the offset rectangle is the desktop area. For Tool Windows and Dialog Boxes, it is the area occupied by the opener window.</p>
+
+			<p>Pixel length is assumed if no unit is specified.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<div class="main_heading"><a name="MaximizeButton">MaximizeButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a maximize button</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2"></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">MaximizeButton On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>Only Standard Windows can have a maximize button.</p>
+			<p>A window cannot have both a minimized button and a help button.</p>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Maximized">Maximized</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Indicates whether the window should be maximized initially</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Maximized On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Maximized Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The Maximized directive determine whether the window should be maximized initially. Only Standard Windows can be maximized.</p>
+
+			<p>Even if you switch off <a href="#MaximizeButton">MaximizeButton</a>, the user can still "demaximized" a window by double clicking on the title bar.</p>
+
+			<div class="main_heading"><a name="MinimizeButton">MinimizeButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a minimize button in its title bar</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">MinimizeButton On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">MinimizeButton On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>Only Standard Window can have a minimized button.</p>
+			<p>A window cannot have both a minimized button and a help button.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Modal">Modal</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Controls whether the user can switch to the opener window while this window is still open</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Modal On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Modal Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The Modal directive makes a Dialog Box modal&ndash;that is, the window will not yield control to the window underneath while it remains open.</p>
+
+			<p>You can close a window programmatically by using the <code>window.close()</code> or <code>window.external.CloseWindow()</code> method in Javascript, or by adding an X-Command-Before header to the HTTP response with the command "Basic _this IDM_CLOSE."</p>
+
+			<p>After the user has submitted a form in the Dialog Box, you may need to update information displayed in the parent window. The easiest way to do this is to add an X-Command-Before header to the HTTP response with the command "Basic _opener IDM_REFRESH."</p>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Resizeable">Resizeable</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window is resizeable</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Resizeable On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Resizeable On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Resizeable Off</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Resizeable Off</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The Resizeable directive deterimes whether a window is resizeable or not. By default, only Standard Windows can be resized. Through this directive you make a Tool Window or Dialog Box resizeable as well; or vice-versa, make a Standard Window not resizeable.</p>
+			<p>A resizeable window has a slightly thicker border than one that is not resizeable</p>
+
+			<p>This directive has no effect when <a href="#Frameless">Frameless</a> or <a href="#FullScreen">FullScreen</a> is on.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Right">Right</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">X-coordinate of the lower right-hand corner of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Right <i>distance</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Right (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The Right directive is used to set the right position of a window. If <a href="#HorizontalAlign">HorizontalAlign</a> is "Right," <i>distance</i> is interpreted as that from the right of the window to the left of its offset rectangle. If HorizontalAlign is "Right," then it is the distance from the right the window to the right of its offset rectangle.</p>
+
+			<p>For Standard Windows, the offset rectangle is the desktop area. For Tool Windows and Dialog Boxes, it is the area occupied by the opener window.</p>
+
+			<p>Pixel length is assumed if no unit is specified.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<div class="main_heading"><a name="RoundedCorners">RoundedCorners</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Width and height of the ellipsis comprising rounded off corners of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">RoundedCorners <i>width</i> [px|sx|in|%] [<i>height</i> [px|sx|in|%]]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RoundedCorners (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The RoundedCorners directive lets you round off the sharp corners of a frameless window. While it possible to do the same to regular windows, the resulting appearance would be very odd.</p>
+
+			<p>The <i>height</i>and <i>width</i> arguments are for the full ellipsis, even though each corner is just one quantrant of it. So a rounded corner that is 5 pixels wide requests a <i>width</i> of 10 pixels. You can think of it as the ellipsis being cut into four pieces, which are then placed at each corner.</p>
+
+			<p><i>height</i> is optional. When omitted the corner is circular, with <i>width</i> being the diameter.</p>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ScrollBar">ScrollBar</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determine whether the window has scroll bars</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ScrollBar On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ScrollBar On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p>The ScrollBar directive can be used to turn off the web browser's unsightly scroll bars. By default the browser shows a vertical scroll bar, even if the document does not require scrolling. If the document body's scroll attribute is set to "auto," the layout would still reserve space for the scroll bar. Setting setting ScrollBar to off turns off the scrolling completely.</p>
+			<div class="note"><b>Note:</b> Setting ScrollBar to Off will turn off scrolling with the mouse wheel or arrow keys as well. Use this directive only when you know the HTML contents are not going to overflow the view port.</div>
+
+			<div class="main_heading"><a name="StandardWindow">&lt;StandardWindow&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;StandardWindow <i>name-regex</i>&gt; ... &lt;/StandardWindow&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>StandardWindow is a container for directives that affect the appearance and behavior of a web browser window.</p>
+
+			<p><i>name-regex</i> is a regular expression. Directives in the block are applied to a window if its name matches the pattern. A match in this case means the full name must fit the pattern. This is constrast to how regular expressions are normally used in Apache, where a pattern would only need to macth some portion of the test string. Wapache automatically adds the start-of-string (^) and end-of-string ($) meta-character to the pattern. You need to put wildcard meta-character in the pattern if you wish to use the same directive block for different windows.</p>
+
+			<p>See <a href="#Window_Types">Window Types</a> for more information.</p>
+
+			<div class="main_heading"><a name="SystemMenu">SystemMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a system menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">SystemMenu On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">SystemMenu On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The system menu is the menu activated by clicking on the icon at the a window's upper left-hand corner. If it is turned off, the icon will disappear as well.</p>
+
+			<p>When <a href="#MaximizeButton">MaximizeButton</a> or <a href="#MinimizeButton">MinimizeButton</a> is set to On, the window will have a system menu regardless of what is specified by this directive.</p>
+
+			<div class="main_heading"><a name="TextSelectionContextMenu">TextSelectionContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right-clicks on a block of selected text</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">TextSelectionContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">TextSelectionContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ToolWindow">&lt;ToolWindow&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window and indicates that it should behave like a tool window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;ToolWindow <i>name-regex</i>&gt; ... &lt;/ToolWindow&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>The ToolWindow is a container for directives that affect the appearance and behavior of a web browser window.</p>
+
+			<p><i>name-regex</i> is a regular expression. Directives in the block are applied to a window if its name matches the pattern. A match in this case means the full name must fit the pattern. This is constrast to how regular expressions are normally used in Apache, where a pattern would only need to macth some portion of the test string. Wapache automatically adds the start-of-string (^) and end-of-string ($) meta-character to the pattern. You need to put wildcard meta-character in the pattern if you wish to use the same directive block for different windows.</p>
+
+			<p>See <a href="#Window_Types">Window Types</a> for more information.</p>
+
+			<div class="main_heading"><a name="Top">Top</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2" width="90%">Sets the top position of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Top <i>distance</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top (undefined)</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top 0px</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top 0px</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+
+			<p>The Top directive is used to set the top position of a window. If <a href="#VerticalAlign">VerticalAlign</a> is "Bottom," <i>distance</i> is interpreted as that from the top of the window to the bottom of its offset rectangle. If VerticalAlign is "Top," then it is the distance from the top the window to the top of its offset rectangle.</p>
+
+			<p>For Standard Windows, the offset rectangle is the desktop area. For Tool Windows and Dialog Boxes, it is the area occupied by the opener window.</p>
+
+			<p>Pixel length is assumed if no unit is specified.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p> 
+
+			<div class="main_heading"><a name="VerticalAlign">VerticalAlign</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Affects how other window positioning directives are interpreted</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">VerticalAlign Top|Middle|Bottom</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Top</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Top</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Middle</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The VerticalAlign directive changes the meaning of <a href="#Top">Top</a> and <a href="#Bottom">Bottom</a>. See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+			<p>Note that the default value for DialogBox is "Middle," while it is "Top" for the other two window types</p>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Width">Width</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Width of the window including its border</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Width <i>length</i> [px|sx|in|%]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def"  valign="top">Width (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p>The Width directive sets the actual Width of the window, including the thickness of its border. A alternative to this directive is <a href="#ClientWidth">ClientWidth</a></p>
+
+			<p>If not unit is specified, pixel length is assumed.</p>
+
+			<p>See <a href="#Window_Placement">Window Placement</a> for more information.</p>
+
+		</td>
+	</tr>
+</table>
+
+</body>

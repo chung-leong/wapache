@@ -1,0 +1,361 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item"><a href="server_conf.html">Server Directives</a></div>
+			
+			<div class="left_item"><a href="client_conf.html">Client Directives<a/></div>
+			
+			<div class="left_item"><a href="win_conf.html">Window Directives</a></div>		
+
+			<div class="left_item">Menu Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#BasicMenuItem">BasicMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DOMEnvMenuItem">DOMEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DOMMenuItem">DOMMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Menu">&lt;Menu&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MenuSeparator">MenuSeparator</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScriptEnvMenuItem">ScriptEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScriptMenuItem">ScriptMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SubMenu">SubMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#UrlEnvMenuItem">UrlEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#UrlMenuItem">UrlMenuItem</a></div>
+			</div>
+			
+			<div class="left_item"><a href="sticon_conf.html">System Tray Directives</a></div>		
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<p>These directive are used to build menus in Wapache. A menu can be attached to the top of a window, with  it submenus dropping down from the menu bar, or it can be used as a context menu that opens when the user right clicks on the HTML document. A menu can also be brought up by clicking on an icon in the System Tray.</p>
+
+			<p>Each menu has a name. To assign a menu to a window, you supply its name to one of the following directives:</p>
+
+			<ul>
+				<li><a href="win_conf.html#DropDownMenu">DropDownMenu</a></li>
+				<li><a href="win_conf.html#AnchorContextMenu">AnchorContextMenu</a></li>
+				<li><a href="win_conf.html#ControlContextMenu">ControlContextMenu</a></li>
+				<li><a href="win_conf.html#DefaultContextMenu">DefaultContextMenu</a></li>
+				<li><a href="win_conf.html#ImageContextMenu">ImageContextMenu</a></li>
+				<li><a href="win_conf.html#TextSelectionDownMenu">TextSelectionDownMenu</a></li>
+			</ul>
+
+			<div class="main_heading"><a name="Menu_Item_Types">Menu Item Types</a></div>
+
+			<p>A menu can contain different types of menu items. <b>Basic</b> menu items are used for accessing functionalities built into the web browser, such as copy, refresh, and print. <b>URL</b> menu items are used for navigating to an different part of the application. They can also open new windows. <b>Script</b> menu items call Javascript functions defined in the HTML document. <b>DOM</b> menu items set a property of an element in the DOM tree identifiable by an id.</p>			
+			<p>Each menu item type has a "Env" version that set an environment variable before carrying out a command. They are used for implementing menu items with state&ndash;whether a particular feature is active, for instance. Enviromental menu items have a check mark next to them when the environment variable has the intended value.</p>
+
+			<div class="main_heading"><a name="Message_Handling">Message Handling</a></div>
+
+			<p>Wapache uses a message broadcast system for handling commands issued through menus. When a user selects a menu item, a message is broadcast to every browser frame in every window. Whether a frame or window actually "hears" the command is control by a regular expression pattern (described as <i>window-name</i> in this document). When the name of the listener matches the pattern, then it hears the command and carries it out. Otherwise the command is ignored.</p>
+
+			<p>Five special names are available for determining which window should process a message based on context: <code>_this</code> refers to the window or frame from which the command originates; <code>_all</code> means all windows and frames; <code>_parent</code> refers to the document window that contains <code>_this</code> while <code>_opener</code> is the one that opened <code>_this</code> (in a separate window); <code>_other</code> means all windows and frames except for <code>_this</code>. Another special name, _<code>app</code>, does not refer to a window at all. It is used for sending commands to the application itself.</p>
+
+			<p>Before showing a menu to the user, Wapache checks to see if at least one window or frame can carry out the available commands. For instance, if a function that gets call by a Script menu item is not actually defined anywhere, Wapache would gray out that item.</p>
+
+			<div class="main_heading"><a name="BasicMenuItem">BasicEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for simultaneously setting an environment variable and executing a basic command</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">BasicEnvMenuItem <i>label</i> <i>window-name</i> <i>env-name</i> <i>env-value</i> <i>command-identifier</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The BasicEnvMenuItem directive adds a basic menu item that sets an environment variable to a particular value before running a command. It useful for implementing user-selectable features. For example, in an application that  supports multiple visual themes, the name of the current theme is stored in an <a href="server_conf.html#PersistentEnv">persistent environment variable</a>. When the user selects a different theme from a drop-down menu, we want the browser to refresh to show the selected theme. The menu could look like this:</p>
+
+			<p>A check mark would appear next to the menu item when the environment variable already has the intended value. The item itself would become inactive.</p>
+
+			<div class="example">
+				&lt;Menu theme&gt;<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "The Good" _this theme_name good IDM_REFRESH<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "The Bad" _this theme_name bad IDM_REFRESH<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "The Ugly" _this theme_name ugly IDM_REFRESH<br>
+				&lt;/Menu&gt;
+			</div>
+
+			<p>See <a href="#BasicMenuItem">BasicMenuItem</a> for more information.</p>			
+
+			<div class="main_heading"><a name="BasicMenuItem">BasicMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for executing a basic command</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">BasicMenuItem <i>label</i> <i>window-name</i> <i>command-identifier</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The BasicMenuItem adds a menu item for activating one of the browser's built-in functions, such a copying text to the clipboard, printing the current page, and opening the Find dialog box. 
+			</p>
+
+			<p>For items in a drop-down menu, you can put an ampersand in front of a letter in <i>label</i> to make it a keyboard mnemonic.</p>
+
+			<p><i>command-identifier</i> is either a number or one of the pre-defined IDM_* constants. See <a href="command_id.html">Command Identifiers</a> for a list of available commands. Environment variable expansion does NOT happen for this argument.</p>
+
+			<div class="example">
+			<b>Commonly Used Commands:</b>
+			<table cellspacing="4">
+				<tr>
+					<td>IDM_UNDO</td><td>Undo the last action</td>
+				</tr>
+				<tr>
+					<td>IDM_COPY</td><td>Copy the selection to the clipboard</td>
+				</tr>
+				<tr>
+					<td>IDM_CUT</td><td>Copy the selection to the clipboard and remove it</td>
+				</tr>
+				<tr>
+					<td>IDM_PASTE</td><td>Insert text from the clipboard</td>
+				</tr>
+				<tr>
+					<td>IDM_CLEARSELECTION</td><td>Remove the selection</td>
+				</tr>
+				<tr>
+					<td>IDM_REFRESH</td><td>Refresh the current page</td>
+				</tr>
+				<tr>
+					<td>IDM_CLOSE</td><td>Close the window</td>
+				</tr>
+				<tr>
+					<td>IDM_EXIT</td><td>Exit the program</td>
+				</tr>
+				<tr>
+					<td>IDM_PRINT</td><td>Print the current page</td>
+				</tr>
+			</table>
+			</div>
+
+			<div class="main_heading"><a name="DOMEnvMenuItem">DOMEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for simultaneously setting an environment variable and modifying an element in the HTML document</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMEnvMenuItem <i>label</i> <i>window-name</i> <i>env-name</i> <i>env-value</i> <i>element-id</i> <i>element-property</i> <i>property-value</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The DOMEnvMenuItem directive adds a basic menu item that sets an environment variable to a particular value before setting the property of a DOM element. It useful for implementing user-selectable features. For example, in an application where the user can select the CSS stylesheet, the name of the current style is stored in an <a href="server_conf.html#Persistent">persistent environment variable</a>. When the user selects a different style from a drop-down menu, we would change the <code>href</code> attribute of the <code>&lt;link&gt;</code> element that links in the CSS file. The menu could look like this:</p>
+
+			<div class="example">
+				&lt;Menu size&gt;<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "Big" _this style big css_link href "/css/{%ENV:style}.css"<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "Normal" _this style normal css_link href "/css/{%ENV:style}.css"<br>
+					&nbsp;&nbsp;BasicEnvMenuItem "Small" _this style small css_link href "/css/{%ENV:style}.css"<br>
+				&lt;/Menu&gt;
+			</div>
+
+			<p>Expansion of environment variables is performed on <i>element-id</i>, <i>element-property</i>, and <i>property-value</i>. The mod_rewrite {%ENV:<i>env</i>} syntax is used.</p>
+
+			<p>A check mark would appear next to the menu item when the environment variable already has the intended value. The item itself would become inactive.</p>
+
+			<p>See <a href="#DOMMenuItem">DOMMenuItem</a> for more information.</p>			
+
+			<div class="main_heading"><a name="DOMMenuItem">DOMMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for modifying an element in the HTML document</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMMenuItem <i>label</i> <i>window-name</i> <i>element</i> <i>element-property</i> <i>property-value</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The DOMMenuItem directive creates a menu item that changes the property of an element in the current  document. The element needs to be identifiable through an id. Internally, Wapache obtains a reference to the object through the <code>all</code> collection.</p>
+
+			<p>Only top-level properties can be set. To change the properties of a child object (e.g. <code>object.style</code>), use a <a href="#ScriptMenuItem">ScriptMenuItem</a>.</p>
+
+			<p>If a given value is invalid for that object property, operation fails silently.</p>
+
+			<p>For items in a drop-down menu, you can put an ampersand in front of a letter in <i>label</i> to make it a keyboard mnemonic.</p>
+
+			<p>Expansion of environment variables is performed on <i>element-id</i>, <i>element-property</i>, and <i>property-value</i>. The mod_rewrite {%ENV:<i>env</i>} syntax is used.</p>
+
+			<div class="note"><b>Node:</b> The object property coresponding to the <code>class</code> attribute is <code>className</code>.</div>
+
+			<div class="main_heading"><a name="Menu">&lt;Menu&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives for defining a drop-down or pop-up menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;menu <i>name</i>&gt; ... &lt;menu&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="MenuSeparator">MenuSeparator</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds an item separator to the menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">MenuSeparator</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ScriptEnvMenuItem">ScriptEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for simultaneously setting an environment variable and invoking a Javascript function</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ScriptEnvMenuItem <i>label</i> <i>window-name</i> <i>env-name</i> <i>env-value</i> <i>function</i> [<i>args ... </i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The ScriptEnvMenuItem directive adds a basic menu item that sets an environment variable to a particular value before calling a Javascript function.</p>
+
+			<p>A check mark would appear next to the menu item when the environment variable already has the intended value. The item itself would become inactive.</p>
+
+			<p>See <a href="#ScriptMenuItem">ScriptMenuItem</a> for more information.</p> 
+
+			<div class="main_heading"><a name="ScriptMenuItem">ScriptMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for invoking a Javascript function</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ScriptMenuItem <i>label</i> <i>window-name</i> <i>function</i> [<i>args ... </i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The ScriptMenuItem directive creates a menu item that would call a Javascript function when the user selects it.</p>
+
+			<p>Environment variable expansion is performed on the function name and all arguments.<p>
+
+			<p>Arguments are always passed as text strings. Wapache assumes they are encoded in the same character set as the current document when converting them to Unicode.</p>
+
+			<p>If the function specified is not defined in the current document, the menu item is grayed out. If <a href="client_conf.html#Scripting">Scripting</a> is set to Off, this would always be the case.</p>
+
+			<p>Any returned value is ignored. If the Javascript function encounters an error, the scripting error dialog box would appear.</p> 
+
+			<div class="main_heading"><a name="SubMenu">SubMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a sub-menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">SubMenu <i>label</i> <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The SubMenu adds a sub-menu to a menu.</p>
+			<div class="warning"><b>Warning:</b> Do not set <i>menu-name</i> to the name of the menu that containers the item. Doing so would cause Wapache to go into an infinite loop and eat up the computer's memory.</div>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="UrlEnvMenuItem">UrlEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for launching a URL</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">UrlEnvMenuItem <i>label</i> <i>window-name</i> <i>env-name</i> <i>env-value</i> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The UrlEnvMenuItem directive adds a basic menu item that sets an environment variable to a particular value before directing a browser window to a URL.</p>
+
+			<p>A check mark would appear next to the menu item when the environment variable already has the intended value. The item itself would become inactive.</p>
+
+			<p>See <a href="#UrlMenuItem">UrlMenuItem</a> for more information</p>
+
+			<div class="main_heading"><a name="UrlMenuItem">UrlMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for launching a URL</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">UrlMenuItem <i>label</i> <i>window-name</i> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p>The UrlMenuItem directive creates a menu item for navigating to a URL.</p>
+
+			<p><i>target</i> is optional. When omitted, the page opens in the window whose name matches <i>window-name</i>. When specified, it opens in the target window.</p>
+
+			<div class="note"><b><i>window-name</i> vs. <i>target</i>:</b> Although it might seem that the two arguments are redundant, there is one important difference between navigating to a URL via one or the other: how Wapache reacts when the window is not already open.<br><br> As discussed above in the <a href="#Message_Handling">Message Handling</a> section, a message is boardcast to all windows when the user select a menu item. A window "hears" a message if its name matches <i>window-name</i>. If no match is found then nothing happens. On the other hand, when <i>target</i> is specified, Wapache will open a new window if there isn't one by that name.</div>
+
+			<p>Expansion of environment variables is performed on <i>url</i> and <i>target</i>. The variables are inserted directly into <i>url</i>, without URL encoding. The result could be therefore be invalid.<p>
+
+		</td>
+	</tr>
+</table>
+
+</body>

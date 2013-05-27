@@ -1,0 +1,1521 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item">Server Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#DefaultEnv">DefaultEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DocumentRoot">DocumentRoot</a></div>
+				<div class="left_sub_item">&#8226; <a href="#PersistentEnv">PersistentEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ServerRoot">ServerRoot</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SessionEnv">SessionEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#VirtualHost">&lt;VirtualHost&gt;</a></div>
+			</div>
+
+			<div class="left_item">Client Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#ActiveX">ActiveX</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DefaultIconPath">DefaultIconPath</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ExternalObject">ExternalObject</a></div>
+				<div class="left_sub_item">&#8226; <a href="#InitialUrl">InitialUrl</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Java">Java</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Scripting">Scripting</a></div>
+			</div>
+
+			<div class="left_item">Window Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#3DBorder">3DBorder</a></div>
+				<div class="left_sub_item">&#8226; <a href="#AnchorContextMenu">AnchorContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#AutoComplete">AutoComplete</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Bottom">Bottom</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ControlContextMenu">ControlContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DefaultContextMenu">DefaultContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DropDownMenu">DropDownMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ClientHeight">ClientHeight</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ClientWidth">ClientWidth</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DialogBox">&lt;DialogBox&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#FlatScrollBar">FlatScrollBar</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Frameless">Frameless</a></div>
+				<div class="left_sub_item">&#8226; <a href="#FullScreen">FullScreen</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Height">Height</a></div>
+				<div class="left_sub_item">&#8226; <a href="#HelpButton">HelpButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#HorizontalAlign">HorizontalAlign</a></div>
+				<div class="left_sub_item">&#8226; <a href="#IconPath">IconPath</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ImageContextMenu">ImageContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#InnerBorder">InnerBorder</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Left">Left</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MaximizeButton">MaximizeButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Maximized">Maximized</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MinimizeButton">MinimizeButton</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Modal">Modal</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Resizeable">Resizeable</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Right">Right</a></div>
+				<div class="left_sub_item">&#8226; <a href="#RoundedCorners">RoundedCorners</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScrollBar">ScrollBar</a></div>
+				<div class="left_sub_item">&#8226; <a href="#StandardWindow">&lt;StandardWindow&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SystemMenu">SystemMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#TableContextMenu">TableContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#TextSelectionContextMenu">TextSelectionContextMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ToolWindow">&lt;ToolWindow&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Top">Top</a></div>
+				<div class="left_sub_item">&#8226; <a href="#VerticalAlign">VerticalAlign</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Width">Width</a></div>
+			</div>
+
+			<div class="left_item">Menu Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#BasicMenuItem">BasicMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DOMEnvMenuItem">DOMEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DOMMenuItem">DOMMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Menu">&lt;Menu&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#MenuSeparator">MenuSeparator</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScriptEnvMenuItem">ScriptEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ScriptMenuItem">ScriptMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SubMenu">SubMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#UrlEnvMenuItem">UrlEnvMenuItem</a></div>
+				<div class="left_sub_item">&#8226; <a href="#UrlMenuItem">UrlMenuItem</a></div>
+			</div>
+
+			<div class="left_item">System Tray Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#AutoExit">AutoExit</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DispatchCharset">DispatchCharset</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DispatchDomain">DispatchDomain</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DoubleClickMenu">DoubleClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#LeftClickMenu">LeftClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#RightClickMenu">RightClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SystemTrayIcon">&lt;SystemTrayIcon&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ToolTip">ToolTip</a></div>
+			</div>
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<div class="main_heading"><a name="DefaultEnv">DefaultEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Default value of an Apache environment variable</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultEnv <i>variable-name</i> <i>value</i> </td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DocumentRoot">DocumentRoot</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Directory that forms the main document tree visible to Wapache</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DocumentRoot <i>directory-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DocumentRoot &lt;<i>config-directory-path</i>&gt;/htdocs</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="PersistentEnv">PersistentEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Mark an environment variable as being persistent</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">PersistentEnv <i>variable-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ServerRoot">ServerRoot</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Base directory for the server installation</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ServerRoot <i>directory-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ServerRoot  &lt;<i>executable-directory-path</i>&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="SessionEnv">SessionEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Indicates that an Apache environment variable should be preserved until the program exits</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">SessionEnv <i>variable-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="VirtualHost">&lt;VirtualHost&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives that apply only to a specific hostname</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;VirtualHost addr [addr] ...&gt; ... &lt;/VirtualHost&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="ActiveX">ActiveX</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can load ActiveX controls</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ActiveX On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ActiveX On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DefaultIconPath">DefaultIconPath</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Specifies the path to the default icon file</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultIconPath <i>ico-file-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DefaultIconPath (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ExternalObject">ExternalObject</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the external object is available for scripting in the web browser</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ExternalObject On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ExternalObject Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="InitialUrl">InitialUrl</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds to the list of URLs that the program navigates to when it starts</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">InitialUrl <i>opener</i> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Java">Java</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can run Java applets</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Java On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Java On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Scripting">Scripting</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can run Javascript and VBScript</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Scripting On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Scripting On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="3DBorder">3DBorder</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether a 3D border appears around a browser frame</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">3DBorder On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">3DBroder On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="AnchorContextMenu">AnchorContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on a hyperlink</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AnchorContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AnchorContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="AutoComplete">AutoComplete</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether AutoComplete is active</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AutoComplete On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AutoComplete Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Bottom">Bottom</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Distance of the window from the bottom of the offset rectangle</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Bottom <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Bottom (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ControlContextMenu">ControlContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on a form input field</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ControlContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ControlContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DefaultContextMenu">DefaultContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right clicks on an element that is neither a hyperlink, image, table, or input field</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DefaultContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DropDownMenu">DropDownMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Specifies a menu to be used as the window's main drop-down menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DropDownMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DropDownMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ClientHeight">ClientHeight</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window excluding the title bar, menu, and border&ndash;i.e. the height of the document view</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ClientHeight <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ClientHeight (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ClientWidth">ClientWidth</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window excluding its border&ndash;i.e. the width of the document view</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ClientWidth <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ClientWidth (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DialogBox">&lt;DialogBox&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window and indicates that should behave like a dialog box</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;DialogBox <i>name-regex</i>&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="FlatScrollBar">FlatScrollBar</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether scroll bars in the web browser window look flat</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">FlatScrollBar On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">FlatScrollBar Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Frameless">Frameless</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window should be frameless</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Frameless On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Frameless Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="FullScreen">FullScreen</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window should take up the space of the entire screen</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">FullScreen On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">FullScreen Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Height">Height</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Height of the window, including the frame</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Height <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Height (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="HelpButton">HelpButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the window has a help button in the title bar</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">HelpButton On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">HelpButton Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="HorizontalAlign">HorizontalAlign</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Affects how other window positioning directives are interpreted</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">HorizontalAlign Left|Center|Right</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Left</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Right</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">HorizontalAlign Center</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="IconPath">IconPath</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Path to icon file used by the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">IconPath <i>ico-file-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">IconPath (Windows default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ImageContextMenu">ImageContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user clicks on an image</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ImageContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ImageContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="InnerBorder">InnerBorder</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the embedded web browser has a border</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">InnerBorder On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">InnerBorder On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="HorizontalAlign">Left</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">X-coordinate of the window's upper-left hand corner</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Left <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left (undefined)</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left 0px</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Left 0px</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="MaximizeButton">MaximizeButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a maximize button</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2"></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">MaximizeButton On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Maximized">Maximized</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Indicates whether the window should be maximized initially</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Maximized On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Maximized Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="MinimizeButton">MinimizeButton</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a minimize button in its title bar</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">MinimizeButton On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">MinimizeButton On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Modal">Modal</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Controls whether the user can switch to the opener window while this window is still open</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Modal On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Modal Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Resizeable">Resizeable</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window is resizeable</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Resizeable On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Resizeable On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Resizeable Off</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Right">Right</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">X-coordinate of the lower right-hand corner of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Right <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Right (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="RoundedCorners">RoundedCorners</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Width and height of ellipses comprising rounded off corners of the window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">RoundedCorners <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt [<i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RoundedCorners 0 0</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ScrollBar">ScrollBar</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determine whether the window has scroll bars</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ScrollBar On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ScrollBar On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="StandardWindow">&lt;StandardWindow&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;StandardWindow <i>name-regex</i>&gt; ... &lt;/StandardWindow&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="SystemMenu">SystemMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Determines whether the window has a system menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">SystemMenu On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">SystemMenu On</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">(not applicable)</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="TableContextMenu">TableContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right-clicks on a table</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">TableContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">TableContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="TextSelectionContextMenu">TextSelectionContextMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of the context menu that appears when the user right-clicks on a block of selected text</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">TextSelectionContextMenu <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">TextSelectionContextMenu (IE default)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ToolWindow">&lt;ToolWindow&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directive affecting the appearance of a web browser window and indicates that it should behave like a tool window</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;ToolWindow <i>name-regex</i>&gt; ... &lt;/ToolWindow&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Top">Top</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2" width="90%">Y-coordinate of the window's upper right-hand corner</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">Top <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top (undefined)</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top 0px</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">Top 0px</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="VerticalAlign">VerticalAlign</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" colspan="2">Affects how other window positioning directives are interpreted</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn" colspan="2">VerticalAlign Top|Middle|Bottom</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Top</td>
+					<td class="main_dir_sum_app" width="50%">StandardWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Top</td>
+					<td class="main_dir_sum_app" width="50%">ToolWindow</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top"><br></td>
+					<td class="main_dir_sum_def" width="40%" valign="top">VerticalAlign Middle</td>
+					<td class="main_dir_sum_app" width="50%">DialogBox</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Width">Width</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Width of the window including its border</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Width <i>pixels</i> [px]|<i>pixels</i> sx|<i>perctange</i>%|<i>points</i> pt</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:<br></td>
+					<td class="main_dir_sum_def"  valign="top">Width (undefined)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt" colspan="2">window config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="BasicMenuItem">BasicMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for executing a basic command</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">BasicMenuItem <i>label</i> <i>window-name</> <i>command-identifier</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DOMEnvMenuItem">DOMEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for simultaneously setting an environment variable and modifying an element in the HTML document</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMEnvMenuItem <i>label</i> <i>window-name</> <i>env-name</i> <i>env-value</i> <i>element-id</i> <i>element-property</i> <i>property-value</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DOMMenuItem">DOMMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for modifying an element in the HTML document</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMMenuItem <i>label</i> <i>window-name</> <i>element</i> <i>element-property</i> <i>property-value</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Menu">&lt;Menu&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives for defining a drop-down or pop-up menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;menu <i>name</i>&gt; ... &lt;menu&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="MenuSeparator">MenuSeparator</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds an item separator to the menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">MenuSeparator</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ScriptEnvMenuItem">ScriptEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for simultaneously setting an environment variable and invoking a Javascript function</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMEnvMenuItem <i>label</i> <i>window-name</> <i>env-name</i> <i>env-value</i> <i>function</i> [<i>args ... </i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ScriptMenuItem">ScriptMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for invoking a Javascript function</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DOMMenuItem <i>label</i> <i>window-name</> <i>function</i> [<i>args ... </i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="SubMenu">SubMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a sub-menu</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">SubMenu <i>label</i> <i>menu-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="UrlEnvMenuItem">UrlEnvMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for launching a URL</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">UrlEnvMenuItem <i>label</i> <i>window-name</> <i>env-name</i> <i>env-value</i> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="UrlMenuItem">UrlMenuItem</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds a menu item for launching a URL</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">UrlMenuItem <i>label</i> <i>window-name</> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">menu config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="AutoExit">AutoExit</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the program exits automatically when all windows have closed</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AutoExit On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AutoExit Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DispatchCharset">DispatchCharset</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Character-set used for translating menu command arguments to Unicode</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DispatchCharset <i>charset</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DispatchCharset iso-8859-1</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DispatchDomain">DispatchDomain</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Domain name used for expanding environment variables in menu command arguments</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DispatchDomain <i>domain-name<i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DispatchDomain (ServerName)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DoubleClickMenu">DoubleClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user double-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DoubleClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DoubleClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="LeftClickMenu">LeftClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user left-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">LeftClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RightClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="RightClickMenu">RightClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user right-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">RightClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RightClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="SystemTrayIcon">&lt;SystemTrayIcon&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives defining a System Tray icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;SystemTrayIcon&gt; ... &lt;/SystemTrayIcon&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ToolTip">ToolTip</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Text that appears in a tool-tip window when the mouse cursor is positioned over the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ToolTip <i>text</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ToolTip (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+		</td>
+	</tr>
+</table>
+
+</body>

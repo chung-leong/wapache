@@ -1,0 +1,30 @@
+<html>
+<head>
+<script>
+
+document.onmousedown = function() {
+	if(event.srcElement.tagName == 'BODY') {
+		external.StartMovingWindow()
+	}
+}
+
+</script>
+</head>
+	<body style="font-family: Arial; color: white" background="images/dingo.png">
+		<p>I am a frameless window with rounded corners. My settings are listed below:</p>
+
+	<pre>	
+&lt;StandardWindow demo_frameless&gt;
+	Left 1in
+	Top 2in
+	Width 349px
+	Height 400px
+	Frameless On
+	Scrollbar Off
+	RoundedCorners 30px
+&lt;/StandardWindow&gt;
+	</pre>			
+
+		<a href="#" onclick="external.CloseWindow()"><b>Click here to close</b></a>
+	</body>
+</html>

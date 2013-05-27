@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Drop-down Menu</title></head>
+	<body id="body_id" style="font-family: Arial" scroll="on">
+	<p>I am a window with a custom context menu. Right click on the page elements to bring them up. The text selection menu will come up when you select some text and right click on it. My settings and the menu definitions are listed below:</p>
+
+	<a href="http://www.google.com">www.google.com</a>
+
+	<img src="images/logo_sm.png">
+
+	<input type="text">
+
+	<pre>	
+&lt;StandardWindow demo_context&gt;
+	VerticalAlign Bottom
+	HorizontalAlign Middle
+	Width 50%
+	Height 50%
+	Bottom 32px
+	AnchorContextMenu a_menu
+	ImageContextMenu img_menu
+	DefaultContextMenu def_menu
+	TextSelectionContextMenu sel_menu
+	ControlContextMenu ctl_menu
+&lt;/StandardWindow&gt;
+
+&lt;Menu a_menu&gt;
+	ScriptMenuItem "Anchor menu" _this alert "Anchor menu"
+&lt;/Menu&gt;
+
+&lt;Menu img_menu&gt;
+	ScriptMenuItem "Image menu" _this alert "Image menu"
+&lt;/Menu&gt;
+
+&lt;Menu def_menu&gt;
+	ScriptMenuItem "Default menu" _this alert "Default menu"
+&lt;/Menu&gt;
+
+&lt;Menu sel_menu&gt;
+	ScriptMenuItem "Selection menu" _this alert "Selection menu"
+&lt;/Menu&gt;
+
+&lt;Menu ctl_menu&gt;
+	ScriptMenuItem "Control menu" _this alert "Control menu"
+&lt;/Menu&gt;
+	</pre>			
+
+	</body>
+</html>

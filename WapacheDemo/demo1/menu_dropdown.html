@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>Drop-down Menu</title></head>
+	<body id="body_id" style="font-family: Arial" scroll="on">
+	<p>I am a window with a drop-down menu. Four types of menu items are demonstrated. Click on them and find out what they do. My settings and the menu definitions are listed below:</p>
+
+	<h2>"<span id="span_id">I can eat glass, it doesn't hurt me</span>"</h2>
+
+	<pre>	
+&lt;StandardWindow demo_dropdown&gt;
+	VerticalAlign Bottom
+	HorizontalAlign Middle
+	Width 50%
+	Height 50%
+	Bottom 32px
+	DropDownMenu dropdown
+&lt;/StandardWindow&gt;
+
+&lt;Menu dropdown&gt;
+	SubMenu "&Basic" basic_menu
+	SubMenu "&DOM" dom_menu
+	SubMenu "&Script" script_menu
+	SubMenu "&URL" url_menu
+&lt;/Menu&gt;
+
+&lt;Menu basic_menu&gt;
+	BasicMenuItem "&Copy" _this IDM_COPY
+	BasicMenuItem "Select &All" _this IDM_SELECTALL
+	BasicMenuItem "&Print" _this IDM_PRINT
+	BasicMenuItem "Close" _this IDM_CLOSE
+&lt;/Menu&gt;
+
+&lt;Menu dom_menu&gt;
+	DOMMenuItem "&English" _this span_id innerHTML "I can eat glass, it doesn't hurt me"
+	DOMMenuItem "&Polish" _this span_id innerHTML "Moge jesc szklo, nie boli mnie to"
+	DOMMenuItem "&Swedish" _this span_id innerHTML "Jag kan äta glas, det gör inte ont"
+&lt;/Menu&gt;
+
+&lt;Menu script_menu&gt;
+	ScriptMenuItem "&Alert" _this alert "Hello?"  
+	ScriptMenuItem "&Opener Alert" _opener alert "Hello?"  
+&lt;/Menu&gt;
+
+&lt;Menu url_menu&gt;
+	UrlMenuItem "&Internal" _this "http://wapache/test.html"
+	UrlMenuItem "&External" _this "http://www.google.com"
+	UrlMenuItem "&Original" _this "http://wapache/menu_dropdown.html"
+&lt;/Menu&gt;
+	</pre>			
+
+	</body>
+</html>

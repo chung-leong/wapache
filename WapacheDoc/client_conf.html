@@ -1,0 +1,192 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item"><a href="server_conf.html">Server Directives</a></div>
+			
+			<div class="left_item">Client Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#ActiveX">ActiveX</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DefaultIconPath">DefaultIconPath</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ExternalObject">ExternalObject</a></div>
+				<div class="left_sub_item">&#8226; <a href="#InitialUrl">InitialUrl</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Java">Java</a></div>
+				<div class="left_sub_item">&#8226; <a href="#Scripting">Scripting</a></div>
+			</div>
+
+			<div class="left_item"><a href="win_conf.html">Window Directives</a></div>		
+
+			<div class="left_item"><a href="menu_conf.html">Menu Directives</a></div>
+			
+			<div class="left_item"><a href="sticon_conf.html">System Tray Directives</a></div>		
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<p>These directives controls the "client-side" behaviors of Wapache.<p>
+			<div class="main_heading"><a name="ActiveX">ActiveX</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can load ActiveX controls</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ActiveX On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ActiveX On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>By default ActiveX is enabled in Wapache. If your application does not make use of ActiveX technology, you may choose to turn it off.</p>
+			<p>Not all ActiveX controls will work properly in Wapache. Those that bypass Windows's Internet service and implement their HTTP own retrieval mechanism will not work.</p>
+			<p>If an ActiveX control is not already installed, Wapache will prompt the user to install it in a dialog box, just as it happens in Internet Explorer. The <code>codebase</code> attribute of the <code>object</code> tag must point to a file served by Wapache. A remote location (e.g. <i>http://download.macromedia.com/.../swflash.cab</i>) will not work. </p>
+			<div class="warning"><b>Warning:</b> An ActiveX control installed through Wapache will become available in Internet Explorer as well. Do not create a control that gives you full access to the computer.</div>
+
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="DefaultIconPath">DefaultIconPath</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Specifies the path to the default icon file</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultIconPath <i>ico-file-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DefaultIconPath (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>This directive specifies the icon that appears at the upper right-hand corner of windows, in the Task Bar, the Task Switch window, and the System Tray. You can assign a specific icon to a window using the <code><a href="win_conf.html#IconPath">IconPath</a></code> directive in a <code><a href="win_conf.html#StandardWindow">&lt;StandardWindow&gt;</a></code> section.</p>
+			<div class="note"><b>Windows XP:</b> When the Task Bar collapses multiple buttons into a single "program group" button, it obtains the icon and application name from the resource data stored in the executable file. To customize them, you need to use a Win32 resource editor.</div>
+
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ExternalObject">ExternalObject</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the external object is available for scripting in the web browser</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ExternalObject On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ExternalObject Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>The <code>window.external</code> object in Wapache provide extra functionalities to the scripting environment normally not available in a web browser. By default this is disabled. Use this directive to enable it if you need these functionalities in your appplication. See the <a href="external.html">External Object documentation</a> for more information.</p>
+			<div class="warning"><b>Warning:</b> Among the things you can do through the external object is starting a program. Understand the security implicition before turning it on, especially if your application is going to display contents retrieved from the web.</div>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="InitialUrl">InitialUrl</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Adds to the list of URLs that the program navigates to when it starts</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">InitialUrl <i>opener</i> <i>url</i> [<i>target</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>Your application will likely have at least one <code>InitialUrl</code> statement. Otherwise no window will appear when the program starts. The program will exit immediately exit in that case&ndash;unless it has a <a href="sticon_conf.html">System Tray icon</a>.</p>
+			<p>The URLs are open in the order as they appear in the configuration file. The first <code>InitialUrl</code> statement should have an opener of <code>_app</code>, a special window name indicating the application. The target parameter provides the name of the window. Wapache uses the window name to look up its settings (height, width, etc), so it is recommended that you always provide one even through it is optional.</p>			
+			<div class="example"><b>Example:</b><br><br>
+				<code>
+					# open the main window<br>
+					InitialUrl _app http://localhost/index.php main<br>
+					<br>
+					# open the toolbox window<br>
+					InitialUrl main http://localhost/tools.php tool<br>
+				</code>
+			</div>
+			<p>Tool windows and dialog boxes are positioned relative to their opener, so for them, it's important that the correct opener is specified.</p>
+			<div class="main_dir_ex"></div>
+
+			<div class="main_heading"><a name="Java">Java</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can run Java applets</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Java On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Java On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>Java is enabled by default. Java applets embedded in HTML pages will only work, however, if the end user had installed the Java Runtime Environment on his/her computer.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="Scripting">Scripting</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the web browser can run Javascript and VBScript</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">Scripting On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">Scripting On</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>Javascript and VBScript are available for use in HTML pages by default. Use this directive to turn it off if your application does not need them.</p>
+			<p>Scripting availability in Wapache is independent of Internet Explorer's settings. Even if the user has disable Active Scripting in Control Panel &gt; Internet Options &gt; Security, Javascript will still be available.</p>
+			<div class="main_dir_ex"></div>
+		</td>
+	</tr>
+</table>
+
+</body>

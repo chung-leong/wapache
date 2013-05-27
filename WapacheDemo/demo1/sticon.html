@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Wapache Demo - System Tray Icon</title></head>
+	<body style="font-family: Arial" scroll="auto">
+		<div align="right">
+		<img src="images/logo_sm.png"><img src="images/title_sm.png"></div>
+		<hr size="1">
+		<p>
+			The icon is in the System Tray (lower right-hand corner). Listed below are its settings:
+		</p>
+
+	<pre>
+&lt;SystemTrayIcon icon&gt;
+	AutoExit On
+	RightClickMenu systray
+	LeftClickMenu systray 2
+	DoubleClickMenu systray 3
+	IconPath "../icons/lightbulb.ico"
+	ToolTip "Wapache Demo"
+&lt;/SystemTrayIcon&gt;
+
+&lt;Menu systray&gt;
+	UrlMenuItem "Main" _app "http://wapache/index.html" Main
+	BasicMenuItem "Show" Main IDM_FOCUS
+	ScriptMenuItem "Alert" Main alert "From System Tray"
+	MenuSeparator
+	BasicMenuItem "Exit" _app IDM_EXIT
+&lt;/Menu&gt;
+	</pre>
+
+		<ul>
+			<li><a href="index.html">Return to main menu<a/></li>
+		</ul>
+	</body>
+</html>

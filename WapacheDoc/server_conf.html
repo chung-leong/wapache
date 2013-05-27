@@ -1,0 +1,187 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item">Server Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#DefaultEnv">DefaultEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DocumentRoot">DocumentRoot</a></div>
+				<div class="left_sub_item">&#8226; <a href="#PersistentEnv">PersistentEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ServerRoot">ServerRoot</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SessionEnv">SessionEnv</a></div>
+				<div class="left_sub_item">&#8226; <a href="#VirtualHost">&lt;VirtualHost&gt;</a></div>
+			</div>
+
+			<div class="left_item"><a href="client_conf.html">Client Directives</a></div>
+			
+			<div class="left_item"><a href="win_conf.html">Window Directives</a></div>
+		
+			<div class="left_item"><a href="menu_conf.html">Menu Directives</a></div>
+			
+			<div class="left_item"><a href="sticon_conf.html">System Tray Directives</a></div>
+			
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<p>Wapache uses the familiar Apache configuration file format for storing application settings. The files are given the extension <b>.wcf</b> to distinguish them from regular server configuration files. The default filename is "default.wcf." Wapache opens this file unless a different one is given on the command-line.</p>
+
+			<p>Wapache retains all directives from the Apache server. Some directives, mainly those dealing with processes and TCP/IP connections, are ignored. Others are modified slightly to accommadate the more fluid nature of desktop applications. To the list of directives Wapache adds a large number of its own for specifying window settings and menu definition.</p>
+
+			<p>Directives are divided into five groups, which are listed on the left.</p> 
+
+			<div class="main_heading"><a name="DefaultEnv">DefaultEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Default value of an Apache environment variable</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DefaultEnv <i>variable-name</i> <i>value</i> </td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p>Apache environment variables are normally lost at the end of a HTTP request. You can preserve them in Wapache through the use of the <a href="#SessionEnv">SessionEnv</a> and <a href="#PersistentEnv">PersistentEnv</a> directive. The DefaultEnv directive let you set their initial values.</p>
+
+			<div class="main_heading"><a name="DocumentRoot">DocumentRoot</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Directory that forms the main document tree visible to Wapache</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DocumentRoot <i>directory-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DocumentRoot &lt;<i>config-directory-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p>The Wapache version of the DocumentRoot directive differs from the original in how it resolves relative paths. Apache resolves relative paths based on the current working directory. Wapache resolves them based on the path to the folder containing the configuration file. For example, if the files of a Wapache-based application are structured as followed:
+			<br><br>
+			<img src="file_structure.png" style="margin-left: 36pt">
+			<br><br>
+			then it will have a DocumentRoot of "../htdocs".</p>
+
+			<p>In general, you should not use an absolute path for DocumentRoot, as you do not know where the folder will end up on an end-user's computer.</p>
+			
+			<div class="note"><b>Note:</b> The example above does not describe the default behavior. If not DocumentRoot is specified, then Wapache uses the folder containing the configuration file.</div>
+
+			<div class="main_heading"><a name="PersistentEnv">PersistentEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Mark an environment variable as being persistent</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">PersistentEnv <i>variable-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p>Apache environment variables are normally lost at the end of a HTTP request. In Wapache you save them in the Windows Registry through the use of the PersistentEnv directive.</p>
+
+			<p>Environment variables are saved in the "Environment" sub-key of the application's registry key. If virtual hosting is used, Wapache creates a sub-key for each domain. The path to the application's main registry key is set using the <a href="client_conf.html#RegistryRoot">RegistryRoot</a> directive. </p> 
+
+			<p>Use the <a href="#DefaultEnv">DefaultEnv</a> the initial value of an environment variable.</p>
+
+			<div class="main_heading"><a name="ServerRoot">ServerRoot</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Base directory for the server installation</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ServerRoot <i>directory-path</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ServerRoot  &lt;<i>executable-directory-path</i>/../&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+
+			<p>The Wapache version of the ServerRoot directive differs from the original in how it resolves relative paths. Apache resolves relative paths based on the current working directory. Wapache resolves them based on the path to the folder containing the executable. For example, if the files of a Wapache-based application are structured as followed:
+			<br><br>
+			<img src="file_structure2.png" style="margin-left: 36pt">
+			<br><br>
+			then it will have a ServerRoot of "../".</p>
+
+			<p>The default value for ServerRoot is in fact "../" (one level up from the folder containing the executable). Unless you want to change the default file structure, there is not need to use this directive.</p>
+
+			<p>In general, you should not use an absolute path for ServerRoot, as you do not know where end-user will install the program on his/her computer.</p>
+
+			<div class="main_heading"><a name="SessionEnv">SessionEnv</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Indicates that an Apache environment variable should be preserved until the program exits</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">SessionEnv <i>variable-name</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config, virtual host</td>
+				</tr>
+			</table>
+			<p>Apache environment variables are normally lost at the end of a HTTP request. In Wapache you can preserve them  until the program exits through the use of the SessionEnv.</p>
+
+			<p>Use the <a href="#DefaultEnv">DefaultEnv</a> the initial value of an environment variable.</p>
+
+			<div class="main_heading"><a name="VirtualHost">&lt;VirtualHost&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives that apply only to a specific hostname</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;VirtualHost addr [addr] ...&gt; ... &lt;/VirtualHost&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p>Virtual hosting capability is retained in Wapache only because it is such an integral part of the Apache server software. There is no real reason to use it.</p>
+			<p>To activate virtual hosting, use the NameVirtualHost directive with an IP address of 127.0.0.1.</p>
+		</td>
+	</tr>
+</table>
+
+</body>

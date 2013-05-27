@@ -1,0 +1,214 @@
+<html>
+<head>
+<title>Wapache - Configuration Directives</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+<table class="cp_header_table" width="100%">
+	<tr>
+		<td valign="bottom">
+			<div class="cp_header_title">Configuration Directives</div>
+		</td>
+		<td align="right">
+			<a href="index.html">
+			<img src="logo_sm.png" border="0"><img src="title_sm.png" border="0">
+			</a>
+		</td>
+	</tr>
+</table>
+<table width="100%">
+	<tr>
+		<td width="25%" class="left_pane" valign="top">
+			<br>
+			<div class="left_item"><a href="server_conf.html">Server Directives</a></div>
+			
+			<div class="left_item"><a href="client_conf.html">Client Directives<a/></div>
+			
+			<div class="left_item"><a href="win_conf.html">Window Directives</a></div>		
+
+			<div class="left_item"><a href="menu_conf.html">Menu Directives</a></div>
+
+			<div class="left_item">System Tray Directives</div>
+			
+			<div class="left_sub_group">
+				<div class="left_sub_item">&#8226; <a href="#AutoExit">AutoExit</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DispatchCharset">DispatchCharset</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DispatchDomain">DispatchDomain</a></div>
+				<div class="left_sub_item">&#8226; <a href="#DoubleClickMenu">DoubleClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#LeftClickMenu">LeftClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#RightClickMenu">RightClickMenu</a></div>
+				<div class="left_sub_item">&#8226; <a href="#SystemTrayIcon">&lt;SystemTrayIcon&gt;</a></div>
+				<div class="left_sub_item">&#8226; <a href="#ToolTip">ToolTip</a></div>
+			</div>
+		</td>
+		<td width="75%" class="main_pane" valign="top">
+			<div class="main_heading"><a name="AutoExit">AutoExit</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Determines whether the program exits automatically when all windows have closed</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">AutoExit On|Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">AutoExit Off</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>Normally, the presence of a System Tray icon keeps Wapache from exiting when the user closes the last browser window. The icon needs to provide a menu item to the user for explicitly closing the program. When AutoExit is set to On, the program exits automatically when all windows have closed.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DispatchCharset">DispatchCharset</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Character-set used for translating menu command arguments to Unicode</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DispatchCharset <i>charset</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DispatchCharset iso-8859-1</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The DispatchCharset directive indicates the character encoding of arguments to <a href="menu_conf.html#ScriptMenuItem">ScriptMenuItem</a> and <a href="menu_conf.html#DOMMenuItem">DOMMenuItem</a>. When menus are attached to a browser window, Wapache assumes these arguments are encoded in the same way as the HTML contents. Since System Tray icons are not associated with a HTML document, this information must be provided in the configuration file.</p>
+	<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DispatchDomain">DispatchDomain</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Domain name used for expanding environment variables in menu command arguments</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DispatchDomain <i>domain-name<i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DispatchDomain (ServerName)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The DispatchDomain directive associates a domain name with a System Tray icon. The domain name determines which browser windows are affected by the actions performed through menu items. It also determines which environment variables are referenced when environment variables are expanded in arguments to <a href="menu_conf.html#ScriptMenuItem">ScriptMenuItem</a>, <a href="menu_conf.html#DOMMenuItem">DOMMenuItem</a>, and other menu item directives.</p>
+			<p>Unless you're using virtual hosting, there is no need to use this directive.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="DoubleClickMenu">DoubleClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user double-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">DoubleClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">DoubleClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The DoubleClickMenu attaches a menu to a System Tray icon. The menu appears when the user double-clicks on the System Tray icon, or if <i>index</i> is specified, the command connected with the menu item is automatically carried out.</p> 
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="LeftClickMenu">LeftClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user left-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">LeftClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RightClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The LeftClickMenu attaches a menu to a System Tray icon. The menu appears when the user left-clicks on the System Tray icon, or if <i>index</i> is specified, the command connected with the menu item is automatically carried out.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="RightClickMenu">RightClickMenu</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Name of context menu that appears when user right-clicks on the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">RightClickMenu <i>menu-name</i> [<i>index</i>]</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">RightClickMenu (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The RightClickMenu attaches a menu to a System Tray icon. The menu appears when the user right-clicks on the System Tray icon, or if <i>index</i> is specified, the command connected with the menu item is automatically carried out.</p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="SystemTrayIcon">&lt;SystemTrayIcon&gt;</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Contains directives defining a System Tray icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">&lt;SystemTrayIcon&gt; ... &lt;/SystemTrayIcon&gt;</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">server config</td>
+				</tr>
+			</table>
+			<p></p>
+			<div class="main_dir_ex"></div>
+			<div class="main_heading"><a name="ToolTip">ToolTip</a></div>
+			<table class="main_dir_sum" width="100%">
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Description:</td>
+					<td class="main_dir_sum_desc" width="90%">Text that appears in a tool-tip window when the mouse cursor is positioned over the icon</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Syntax:</td>
+					<td class="main_dir_sum_syn">ToolTip <i>text</i></td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Default:</td>
+					<td class="main_dir_sum_def" valign="top">ToolTip (none)</td>
+				</tr>
+				<tr>
+					<td class="main_dir_sum_label" width="10%" valign="top">Context:</td>
+					<td class="main_dir_sum_cxt">system tray icon config</td>
+				</tr>
+			</table>
+			<p>The ToolTip directive specifies the text that pops up when the user moves the mouse pointer over the System Tray icon.</p>
+			<div class="main_dir_ex"></div>
+		</td>
+	</tr>
+</table>
+
+</body>

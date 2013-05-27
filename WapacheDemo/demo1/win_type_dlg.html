@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>Dialog Box</title>
+	<script>
+		document.onhelp = function() {
+			var help = event.srcElement.help;
+			if(!help) help = 'No help text available';
+			alert(help)
+		}
+	</script>
+
+	</head>
+	<body style="font-family: Microsoft Sans Serif; font-size: 10pt; background-color: buttonface" scroll="auto">
+	<p help="Some text">I am a Dialog Box. I will always stay in front of the window that opened me. And since I am set to be modal, I won't let you return to the opener until you close me. My settings are listed below:</p>
+
+	<pre help="Dialog box settings">	
+&lt;DialogBox demo_dlg&gt;
+	Width 450px
+	Height 330px 
+	3DBorder Off     
+	ScrollBar Off
+	Modal On
+	HelpButton On
+&lt;/DialogBox&gt;
+	</pre>			
+
+	<div align="center">
+		<button onclick="external.CloseWindow()" style="width: 6em" help="Close the Window">OK</button>
+	</div>
+	</body>
+</html>
