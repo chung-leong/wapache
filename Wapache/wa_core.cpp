@@ -2,6 +2,20 @@
 #include "WapacheApplication.h"
 #include "WapacheProtocol.h"
 
+APLOG_USE_MODULE(wa_core);
+
+struct core_output_filter_ctx {
+    apr_bucket_brigade *buffered_bb;
+    apr_bucket_brigade *tmp_flush_bb;
+    apr_pool_t *deferred_write_pool;
+    apr_size_t bytes_written;
+};
+
+struct core_filter_ctx {
+    apr_bucket_brigade *b;
+    apr_bucket_brigade *tmpbb;
+};
+
 static const char *set_server_root(cmd_parms *cmd, void *dummy,
                                    const char *arg)
 {
@@ -130,7 +144,7 @@ static conn_rec *wa_core_create_conn(apr_pool_t *ptrans, server_rec *server,
 
     c->sbh = sbh;
 	c->local_addr = addr;
-	c->remote_addr = addr; 
+	c->client_addr = addr; 
     c->conn_config = ap_create_conn_config(ptrans);
     c->notes = apr_table_make(ptrans, 5);	
     c->pool = ptrans;
@@ -814,7 +828,7 @@ static int wa_core_input_filter(ap_filter_t *f, apr_bucket_brigade *b,
         }
         else if (mode == AP_MODE_SPECULATIVE) {
             apr_bucket *copy_bucket;
-            APR_BRIGADE_FOREACH(e, ctx->b) {
+			for(e = APR_BRIGADE_FIRST(ctx->b); e != APR_BRIGADE_SENTINEL(ctx->b); e = APR_BUCKET_NEXT(e)) {
                 rv = apr_bucket_copy(e, &copy_bucket);
                 if (rv != APR_SUCCESS) {
                     return rv;
@@ -838,7 +852,7 @@ static apr_status_t wa_http_header_filter(ap_filter_t *f, apr_bucket_brigade *b)
 	wa_conn_rec *wc = (wa_conn_rec *) c;
 	WapacheProtocol *proto = (WapacheProtocol *) wc->object;
 
-    APR_BRIGADE_FOREACH(e, b) {
+	for(e = APR_BRIGADE_FIRST(b); e != APR_BRIGADE_SENTINEL(b);	e = APR_BUCKET_NEXT(e)) {
         if (e->type == &ap_bucket_type_error) {
             ap_bucket_error *eb = (ap_bucket_error *) e->data;
 
@@ -959,8 +973,6 @@ static apr_status_t wa_core_output_filter(ap_filter_t *f, apr_bucket_brigade *b)
     return APR_SUCCESS;
 }
 
-static const char *wa_core_http_method(const request_rec *r)
-    { return "http"; }
 
 static apr_port_t wa_core_default_port(const request_rec *r)
     { return DEFAULT_HTTP_PORT; }
@@ -976,7 +988,6 @@ static void register_hooks(apr_pool_t *p)
     ap_hook_post_config(wa_core_post_config,NULL,NULL,APR_HOOK_REALLY_FIRST);
     ap_hook_translate_name(wa_core_translate,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_map_to_storage(wa_core_map_to_storage,NULL,NULL,APR_HOOK_REALLY_LAST);
-	ap_hook_http_method(wa_core_http_method,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_default_port(wa_core_default_port,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_handler(wa_default_handler,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_type_checker(do_nothing,NULL,NULL,APR_HOOK_REALLY_LAST);

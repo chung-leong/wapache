@@ -61,7 +61,6 @@ void RedirectIOToConsole(BOOL state) {
 	redirecting = state;
 	if(state) {
 		CONSOLE_SCREEN_BUFFER_INFO coninfo;
-		SMALL_RECT rect;
 
 		// allocate a console for this app
 		if(!AllocConsole()) {
@@ -81,18 +80,12 @@ void RedirectIOToConsole(BOOL state) {
 		GetConsoleMode(input, &mode);
 		SetConsoleMode(input, mode | ENABLE_EXTENDED_FLAGS | ENABLE_QUICK_EDIT_MODE);
 
-		// GetConsoleWindow is Win2K only--find it dynamically
-		HMODULE lib = LoadLibrary("kernel32.dll");
-		GetConsoleWindowProc GetConsoleWindow = (GetConsoleWindowProc) GetProcAddress(lib, "GetConsoleWindow");
-		if(GetConsoleWindow) {
-			HWND hwnd = GetConsoleWindow();
+		// prevent closing of the console window
+		HWND hwnd = GetConsoleWindow();
+		HMENU menu = GetSystemMenu(hwnd, FALSE); 
+		DeleteMenu(menu, SC_CLOSE, MF_BYCOMMAND); 
+		DrawMenuBar(hwnd); 
 
-			// prevent closing of the console window
-			HMENU menu = GetSystemMenu(hwnd, FALSE); 
-			DeleteMenu(menu, SC_CLOSE, MF_BYCOMMAND); 
-			DrawMenuBar(hwnd); 
-		}
-		FreeLibrary(lib);
 		RedirectStreamsToStardardHandlers();
 	} else {
 		FreeConsole();

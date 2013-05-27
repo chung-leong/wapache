@@ -18,7 +18,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
-	HANDLE wapache_handle;
 	ZeroMemory(&si, sizeof(si));
 	si.cb = sizeof(si);
 	ZeroMemory(&pi, sizeof(pi));

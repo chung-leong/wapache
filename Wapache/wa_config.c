@@ -50,7 +50,6 @@
 #include "http_main.h"
 #include "http_vhost.h"
 #include "util_cfgtree.h"
-#include "mpm.h"
 
 /*****************************************************************
  *
@@ -343,7 +342,7 @@ const char * wa_init_virtual_host(apr_pool_t *p,
     s->keep_alive = -1;
     s->keep_alive_max = -1;
     s->error_log = main_server->error_log;
-    s->loglevel = main_server->loglevel;
+    s->log = main_server->log;
     /* useful default, otherwise we get a port of 0 on redirects */
     s->port = main_server->port;
     s->next = NULL;
@@ -410,8 +409,51 @@ const char *wa_walk_client_config(ap_directive_t *current,
     return errmsg;
 }
 
+    /** Argument to command from cmd_table */
+    void *info;
+    /** Which allow-override bits are set */
+    int override;
+    /** Which allow-override-opts bits are set */
+    int override_opts;
+    /** Table of directives allowed per AllowOverrideList */
+    apr_table_t *override_list;
+    /** Which methods are &lt;Limit&gt;ed */
+    apr_int64_t limited;
+    /** methods which are limited */
+    apr_array_header_t *limited_xmethods;
+    /** methods which are xlimited */
+    ap_method_list_t *xlimited;
+
+    /** Config file structure. */
+    ap_configfile_t *config_file;
+    /** the directive specifying this command */
+    ap_directive_t *directive;
+
+    /** Pool to allocate new storage in */
+    apr_pool_t *pool;
+    /** Pool for scratch memory; persists during configuration, but
+     *  wiped before the first request is served...  */
+    apr_pool_t *temp_pool;
+    /** Server_rec being configured for */
+    server_rec *server;
+    /** If configuring for a directory, pathname of that directory.
+     *  NOPE!  That's what it meant previous to the existence of &lt;Files&gt;,
+     * &lt;Location&gt; and regex matching.  Now the only usefulness that can be
+     * derived from this field is whether a command is being called in a
+     * server context (path == NULL) or being called in a dir context
+     * (path != NULL).  */
+    char *path;
+    /** configuration command */
+    const command_rec *cmd;
+
+    /** per_dir_config vector passed to handle_command */
+    struct ap_conf_vector_t *context;
+    /** directive with syntax error */
+    const ap_directive_t *err_directive;
+
+
 static cmd_parms default_parms =
-{NULL, 0, -1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+{NULL, 0, -1, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 int wa_process_config_tree(server_rec *s,
                            ap_directive_t *conftree,

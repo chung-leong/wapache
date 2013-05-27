@@ -5,17 +5,12 @@
 #include "WapacheProtocol.h"
 #include "apr_env.h"
 
+APLOG_USE_MODULE(wa_core);
+
 WapacheApplication Application;
 
 typedef HWND (WINAPI *GetTaskmanWindowProc)(void);
 GetTaskmanWindowProc GetTaskmanWindow;
-
-#define FR_PRIVATE     0x10
-#define FR_NOT_ENUM    0x20
-typedef int (WINAPI *AddFontResourceExProc)(LPCTSTR lpszFilename, DWORD fl, PVOID pdv);
-typedef BOOL (WINAPI *RemoveFontResourceExProc)(LPCTSTR lpszFilename, DWORD fl, PVOID pdv);
-AddFontResourceExProc AddFontResourceEx;
-RemoveFontResourceExProc RemoveFontResourceEx;
 
 WapacheApplication::WapacheApplication(void) 
 {
@@ -50,10 +45,6 @@ WapacheApplication::WapacheApplication(void)
 	}
 	OriginalTaskbarGroupButtonIconIndex = -1;
 	OriginalTaskbarGroupButtonData = NULL;
-
-	HMODULE lib = GetModuleHandle("gdi32.dll");
-	AddFontResourceEx = (AddFontResourceExProc) GetProcAddress(lib, "AddFontResourceExA");
-	RemoveFontResourceEx = (RemoveFontResourceExProc) GetProcAddress(lib, "RemoveFontResourceExA");
 }
 
 WapacheApplication::~WapacheApplication(void)
@@ -157,9 +148,7 @@ void WapacheApplication::Switch(MsgProc proc, void  *data)
 	PostThreadMessage(ThreadId, WM_CONTINUE, wParam, lParam);
 }
 
-void wa_report_error(const char *file, int line, int level,	 apr_status_t status, 
-					 const server_rec *s, const request_rec *r, apr_pool_t *pool,
-					 const char *errstr)
+void wa_report_error(const ap_errorlog_info *info, const char *errstr)
 {
 	MessageBox(NULL, errstr, "Error", MB_OK);
 }
@@ -184,9 +173,7 @@ bool WapacheApplication::InitializeApache(void) {
 
 	if(rv != APR_SUCCESS) {
 		// need to call the function directly, since the hook is not set up yet
-		wa_report_error(APLOG_MARK, APLOG_STARTUP |APLOG_ERR, rv, NULL, NULL, NULL, 
-					    "apr_pool_create() failed to create "
-                        "initial context");		
+		wa_report_error(NULL, "apr_pool_create() failed to create initial context");		
 		return false;
 	}
 
@@ -267,6 +254,9 @@ bool WapacheApplication::InitializeApache(void) {
 	chdir(ap_server_root);
 
     ServerConf = (wa_server_rec *) ap_read_config(Process, ptemp, Process->conf_name, &ap_conftree);
+	if(!ServerConf) {
+		return false;
+	}
 
 	if(!ServerConf->server_hostname) {
 		ServerConf->server_hostname = "localhost";
@@ -711,7 +701,7 @@ LPOLESTR WapacheApplication::ConvertString(DWORD code, const char *s, int len)
 		converted = len;
 		hr = MultiLang->ConvertStringToUnicode(&mode, code, const_cast<char *>(s), &converted, 
 												ws, &wLen);
-	} while(SUCCEEDED(hr) && converted < len);
+	} while(SUCCEEDED(hr) && converted < (UINT) len);
 
 	if(SUCCEEDED(hr)) {
 		return ws;
@@ -1179,7 +1169,7 @@ bool WapacheApplication::EnumServers(ServerEnumFunc func, void *data)
 			addr->ipaddr_ptr = &addr->sa.sin.sin_addr;
 
 			c->local_addr = addr;
-			c->remote_addr = addr; 
+			c->client_addr = addr; 
 			c->pool = ptrans;
 
 			ap_update_vhost_given_ip(c);
@@ -1229,7 +1219,7 @@ bool WapacheApplication::FindServer(const char *domain, server_rec **pServer)
 			addr->ipaddr_ptr = &addr->sa.sin.sin_addr;
 
 			c->local_addr = addr;
-			c->remote_addr = addr; 
+			c->client_addr = addr; 
 			c->pool = ptrans;
 
 			ap_update_vhost_given_ip(c);
@@ -1279,7 +1269,7 @@ void WapacheApplication::GetEnvironmentVarType(const char *domain, const char *k
 
 		keyCount = conf->sess_env->nelts;
 		keys = (const char **) conf->sess_env->elts;
-		for(i = 0; i < keyCount; i++) {
+		for(int i = 0; i < keyCount; i++) {
 			if(stricmp(keys[i], key) == 0){
 				*isPersistent = *isSession = true;
 				break;
@@ -1426,7 +1416,7 @@ bool AddServerDocRoot(server_rec *s, void *d) {
 		DocMonitorSiteData *v = &m->sites[m->siteCount++];
 		v->domain = apr_pstrdup(m->pool, s->server_hostname);
 		char *dir = apr_pstrdup(m->pool, conf->ap_document_root);
-		for(int i = 0; i < strlen(dir); i++) {
+		for(int i = 0; (size_t) i < strlen(dir); i++) {
 			dir[i] = (dir[i] == '/') ? '\\' : dir[i];
 		}
 		v->dir = dir;
@@ -1435,7 +1425,7 @@ bool AddServerDocRoot(server_rec *s, void *d) {
 		int extCount = conf->monitor_ext->nelts;
 		v->extCount = extCount;
 		v->exts = reinterpret_cast<const char **>(apr_palloc(m->pool, sizeof(const char *) * extCount));
-		for(i = 0; i < extCount; i++) {
+		for(int i = 0; i < extCount; i++) {
 			v->exts[i] = apr_pstrdup(m->pool, exts[i]);
 		}
 		v->mTime = GetContentModifiedTime(v->dir, v->exts, v->extCount);
@@ -1463,7 +1453,7 @@ void WapacheApplication::MonitorDocumentRootFileChange(void)
 			m.waitObjs = reinterpret_cast<HANDLE *>(apr_pcalloc(m.pool, sizeof(HANDLE) * (m.siteCount + 2)));
 			m.waitObjs[0] = TerminationSignal;
 			m.waitObjs[1] = ConfigChangeSignal;			
-			for(i = 0; i < m.siteCount; i++) {
+			for(int i = 0; i < m.siteCount; i++) {
 				m.waitObjs[i + 2] = FindFirstChangeNotification(m.sites[i].dir, TRUE, FILE_NOTIFY_CHANGE_LAST_WRITE);
 			}
 		}
@@ -1646,23 +1636,19 @@ bool WapacheApplication::RestoreTaskbarGroupButton(void) {
 }
 
 void WapacheApplication::InstallPrivateFonts(void) {
-	if(AddFontResourceEx) {
-		wa_font_config **fonts = (wa_font_config **) Application.ClientConf->fonts->elts;
-		int count = Application.ClientConf->fonts->nelts;
-		int installed = 0;
-		for(int i = 0; i < count; i++) {
-			const char *path = fonts[i]->FilePath;
-			installed += AddFontResourceEx(fonts[i]->FilePath, FR_PRIVATE, 0);
-		}
+	wa_font_config **fonts = (wa_font_config **) Application.ClientConf->fonts->elts;
+	int count = Application.ClientConf->fonts->nelts;
+	int installed = 0;
+	for(int i = 0; i < count; i++) {
+		const char *path = fonts[i]->FilePath;
+		installed += AddFontResourceEx(fonts[i]->FilePath, FR_PRIVATE, 0);
 	}
 }
 
 void WapacheApplication::UninstallPrivateFonts(void) {
-	if(RemoveFontResourceEx) {
-		wa_font_config **fonts = (wa_font_config **) Application.ClientConf->fonts->elts;
-		int count = Application.ClientConf->fonts->nelts;
-		for(int i = 0; i < count; i++) {
-			RemoveFontResourceEx(fonts[i]->FilePath, FR_PRIVATE, 0);
-		}
+	wa_font_config **fonts = (wa_font_config **) Application.ClientConf->fonts->elts;
+	int count = Application.ClientConf->fonts->nelts;
+	for(int i = 0; i < count; i++) {
+		RemoveFontResourceEx(fonts[i]->FilePath, FR_PRIVATE, 0);
 	}
 }

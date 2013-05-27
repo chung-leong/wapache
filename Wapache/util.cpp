@@ -199,7 +199,7 @@ LPOLESTR BuildRequestHeaderString(request_rec *r)
 	return h.str;
 }
 
-char *fragment(apr_pool_t *p, const char *s, regmatch_t m) {
+char *fragment(apr_pool_t *p, const char *s, ap_regmatch_t m) {
 	if(m.rm_so < m.rm_eo) {
 		return apr_pstrndup(p, s + m.rm_so, m.rm_eo - m.rm_so);
 	}
@@ -211,7 +211,7 @@ char *fragment(apr_pool_t *p, const char *s, regmatch_t m) {
 
 bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCSTR s)
 {
-	static regex_t *url_parser_regex = NULL;
+	static ap_regex_t *url_parser_regex = NULL;
 	const char *re = "((\\w+)://(([^@:]*)(:([^@]*))?@)?([\\w.-]+)(:(\\d{0,5}))?)?(([^\\?\\*<>:\"]*)?(\\?([^#]+))?(#(.+))?)";
 	// Capturing:
 	// 1 -> root
@@ -229,7 +229,7 @@ bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCSTR s)
 		url_parser_regex = ap_pregcomp(Application.Process->pool, re, 0);
 	}
 
-	regmatch_t matches[16];
+	ap_regmatch_t matches[16];
 
 	if(ap_regexec(url_parser_regex, s, 16, matches, 0) == 0) {
 		if(matches[1].rm_so >= 0) {

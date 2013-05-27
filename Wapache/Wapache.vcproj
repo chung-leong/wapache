@@ -1,118 +1,181 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9.00"
 	Name="Wapache"
 	ProjectGUID="{44C147D6-BFC7-447C-847B-FCFA8EA8F3D1}"
 	RootNamespace="Wapache"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../httpd/include;../httpd/srclib/apr/include;../httpd/srclib/apr/include/arch;../httpd/srclib/apr/include/arch/win32;&quot;../httpd/srclib/apr-util/include&quot;;../httpd/os/win32;../httpd/mpm/winnt"
+				AdditionalIncludeDirectories="../httpd/include;../httpd/srclib/apr/include;../httpd/srclib/apr/include/arch;../httpd/srclib/apr/include/arch/win32;&quot;../httpd/srclib/apr-util/include&quot;;../httpd/os/win32;../httpd/mpm/winnt;../apr/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib comsupp.lib comctl32.lib Urlmon.lib wininet.lib ..\httpd\srclib\apr\Debug\libapr.lib ..\httpd\srclib\apr-iconv\Debug\libapriconv.lib ..\httpd\srclib\apr-util\Debug\libaprutil.lib ..\httpd\Debug\libhttpd.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib comsupp.lib comctl32.lib Urlmon.lib wininet.lib ..\httpd\srclib\apr\Debug\libapr-1.lib ..\httpd\srclib\apr-iconv\Debug\libapriconv-1.lib ..\httpd\srclib\apr-util\Debug\libaprutil-1.lib ..\httpd\Debug\libhttpd.lib"
 				OutputFile="$(OutDir)/Wapache.exe"
 				LinkIncremental="2"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/Wapache.pdb"
 				SubSystem="2"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				OmitFramePointers="TRUE"
+				OmitFramePointers="true"
 				AdditionalIncludeDirectories="../httpd/include;../httpd/srclib/apr/include;../httpd/srclib/apr/include/arch;../httpd/srclib/apr/include/arch/win32;&quot;../httpd/srclib/apr-util/include&quot;;../httpd/os/win32;../httpd/mpm/winnt"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				StringPooling="TRUE"
+				StringPooling="true"
 				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="3"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="2"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="odbc32.lib odbccp32.lib comsupp.lib comctl32.lib Urlmon.lib wininet.lib ..\httpd\srclib\apr\Release\libapr.lib ..\httpd\srclib\apr-iconv\Release\libapriconv.lib ..\httpd\srclib\apr-util\Release\libaprutil.lib ..\httpd\Release\libhttpd.lib"
 				OutputFile="$(OutDir)/Wapache.exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -120,179 +183,236 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="constants.cpp">
+				RelativePath="constants.cpp"
+				>
 			</File>
 			<File
-				RelativePath="expand_env.c">
+				RelativePath="expand_env.c"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\guicon.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32"
-					ExcludedFromBuild="TRUE">
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="main.cpp">
-			</File>
-			<File
-				RelativePath="StdAfx.cpp">
+				RelativePath=".\guicon.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="util.cpp">
-			</File>
-			<File
-				RelativePath="wa_client.cpp">
-			</File>
-			<File
-				RelativePath="wa_config.c">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32">
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"/>
+						UsePrecompiledHeader="0"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="wa_core.cpp">
+				RelativePath="main.cpp"
+				>
+			</File>
+			<File
+				RelativePath="StdAfx.cpp"
+				>
 				<FileConfiguration
-					Name="Debug|Win32">
+					Name="Debug|Win32"
+					>
 					<Tool
 						Name="VCCLCompilerTool"
-						GeneratePreprocessedFile="0"/>
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="WapacheApplication.cpp">
+				RelativePath="util.cpp"
+				>
 			</File>
 			<File
-				RelativePath="WapacheDispatcher.cpp">
+				RelativePath="wa_client.cpp"
+				>
 			</File>
 			<File
-				RelativePath="WapacheExternal.cpp">
+				RelativePath="wa_config.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="WapacheLock.cpp">
+				RelativePath="wa_core.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="WapacheProtocol.cpp">
+				RelativePath="WapacheApplication.cpp"
+				>
 			</File>
 			<File
-				RelativePath="WapacheTrayIcon.cpp">
+				RelativePath="WapacheDispatcher.cpp"
+				>
 			</File>
 			<File
-				RelativePath="WapacheWindow.cpp">
+				RelativePath="WapacheExternal.cpp"
+				>
+			</File>
+			<File
+				RelativePath="WapacheLock.cpp"
+				>
+			</File>
+			<File
+				RelativePath="WapacheProtocol.cpp"
+				>
+			</File>
+			<File
+				RelativePath="WapacheTrayIcon.cpp"
+				>
+			</File>
+			<File
+				RelativePath="WapacheWindow.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="constants.h">
+				RelativePath="constants.h"
+				>
 			</File>
 			<File
-				RelativePath=".\guicon.h">
+				RelativePath=".\guicon.h"
+				>
 			</File>
 			<File
-				RelativePath="Resource.h">
+				RelativePath="Resource.h"
+				>
 			</File>
 			<File
-				RelativePath="StdAfx.h">
+				RelativePath="StdAfx.h"
+				>
 			</File>
 			<File
-				RelativePath="util.h">
+				RelativePath="util.h"
+				>
 			</File>
 			<File
-				RelativePath="wa_config.h">
+				RelativePath="wa_config.h"
+				>
 			</File>
 			<File
-				RelativePath="wapache.h">
+				RelativePath="wapache.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheApplication.h">
+				RelativePath="WapacheApplication.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheDispatcher.h">
+				RelativePath="WapacheDispatcher.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheExternal.h">
+				RelativePath="WapacheExternal.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheLock.h">
+				RelativePath="WapacheLock.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheProtocol.h">
+				RelativePath="WapacheProtocol.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheTrayIcon.h">
+				RelativePath="WapacheTrayIcon.h"
+				>
 			</File>
 			<File
-				RelativePath="WapacheWindow.h">
+				RelativePath="WapacheWindow.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+			>
 			<File
-				RelativePath="icon1.ico">
+				RelativePath="icon1.ico"
+				>
 			</File>
 			<File
-				RelativePath="small.ico">
+				RelativePath="small.ico"
+				>
 			</File>
 			<File
 				RelativePath="Wapache.ico"
-				DeploymentContent="TRUE">
+				DeploymentContent="true"
+				>
 			</File>
 			<File
-				RelativePath="Wapache.rc">
+				RelativePath="Wapache.rc"
+				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="Do to list.txt">
+			RelativePath="Do to list.txt"
+			>
 		</File>
 		<File
-			RelativePath="ReadMe.txt">
+			RelativePath="ReadMe.txt"
+			>
 		</File>
 	</Files>
 	<Globals>

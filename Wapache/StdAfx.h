@@ -10,6 +10,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define WINVER 0x0500
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
 
 #include <windows.h>
@@ -58,7 +59,8 @@ extern "C"
 #include "http_request.h"
 #include "http_protocol.h"
 #include "ap_mpm.h"
-#include "mpm_default.h"
+#include "ap_mmn.h"
+#include "apr_arch_networkio.h"
 #include "http_config.h"
 #include "http_core.h"
 #include "http_vhost.h"

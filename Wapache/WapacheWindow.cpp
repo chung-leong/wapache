@@ -807,7 +807,6 @@ bool WapacheWindow::OnClose(bool mustClose)
 		if(this != LastWindowToClose) {
 			HRESULT hr;
 			IHTMLDocument2 *doc;
-			IDispatch *script;
 			IDispatch *docDisp;
 			hr = Browser->get_Document(&docDisp);
 			if(hr == S_OK) {
@@ -945,11 +944,11 @@ void WapacheWindow::OnSizing(WORD type, RECT *rect) {
 		if(Flags & MAINTAIN_CLIENT_AREA_ASPECT_RATIO) {
 			long client_width = frame_width - FrameOffset.cx;
 			long client_height = frame_height - FrameOffset.cy;
-			prop_width = (client_height * AspectRatio) + FrameOffset.cx;
-			prop_height = (client_width / AspectRatio) + FrameOffset.cy;
+			prop_width = (long) (client_height * AspectRatio) + FrameOffset.cx;
+			prop_height = (long) (client_width / AspectRatio) + FrameOffset.cy;
 		} else {
-			prop_width = (frame_width * AspectRatio);
-			prop_height = (frame_height / AspectRatio);
+			prop_width = (long) (frame_width * AspectRatio);
+			prop_height = (long) (frame_height / AspectRatio);
 		}
 		if(prop_width < MinimumSize.cx) {
 			prop_width = MinimumSize.cx;
@@ -1727,7 +1726,7 @@ bool CheckMenuItemAvailability(HMENU hMenu, int pos, int id, void *data) {
 		if(GetMenuItemInfo(hMenu, pos, TRUE, &mii)) {
 			IDispatch *itemDisp = (IDispatch *) mii.dwItemData;
 			if(itemDisp) {
-				VARIANT disabled, method, checked, radio;
+				VARIANT disabled, method, checked;
 				VariantInit(&disabled);
 				VariantInit(&method);
 				VariantInit(&checked);
@@ -2116,7 +2115,6 @@ void WapacheWindow::InitExecContext(WapacheExecContext *context, IHTMLDocument2 
 
 void WapacheWindow::InitExecContext(WapacheExecContext *context, const char *domain, const char *charSet)
 {
-	HRESULT hr;
 	ZeroMemory(context, sizeof(WapacheExecContext));
 
 	// create a temporary pool for string operations

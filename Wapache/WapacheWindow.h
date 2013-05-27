@@ -436,7 +436,7 @@ struct WapacheExecContext {
 	DWORD Flags;
 	apr_pool_t *TemporaryPool;
 	const char *Name;
-	regex_t *Pattern;
+	ap_regex_t *Pattern;
 	const char *Scheme;
 	const char *Domain;
 	DWORD Codepage;

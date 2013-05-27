@@ -72,12 +72,12 @@ enum {
 
 struct wa_onclose_config {
 	const char *Method;
-	regex_t *Pattern;
+	ap_regex_t *Pattern;
 	apr_array_header_t *Args;	
 };
 
 struct wa_win_config {
-	regex_t *TargetPattern;
+	ap_regex_t *TargetPattern;
 
 	const char *IconPath;
 
@@ -143,7 +143,7 @@ struct wa_regular_menu_config : public wa_menu_config {
 
 struct wa_script_menu_config : public wa_menu_config {
 	const char *Method;
-	regex_t *Pattern;
+	ap_regex_t *Pattern;
 };
 
 enum {
@@ -170,7 +170,7 @@ struct wa_menu_item_config {
 	int Type;
 	const char *Label;
 	UINT Id;
-	regex_t *Pattern;
+	ap_regex_t *Pattern;
 };
 
 struct wa_std_menu_item_config : public wa_menu_item_config {

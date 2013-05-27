@@ -4,6 +4,8 @@
 #include "WapacheApplication.h"
 #include "WapacheDispatcher.h"
 
+APLOG_USE_MODULE(wa_core);
+
 /* 4BA03260-7C19-4AE9-94F6-5836D9931875 */
 EXTERN_C const GUID CLSID_WapacheProtocol
 	= {0x4BA03260L,0x7C19,0x4AE9,{0x94,0xF6,0xF6,0x36,0xD9,0x93,0x18,0x75}};
@@ -87,7 +89,7 @@ void WapacheProtocol::ProcessConnection(void) {
 	// create a fake socket
 	sock = (apr_socket_t *) apr_pcalloc(Pool, sizeof(apr_socket_t));
 
-    sock->cntxt = Pool;
+    sock->pool = Pool;
     sock->local_port_unknown = 1;
     sock->local_interface_unknown = 1;
     sock->remote_addr_unknown = 1;
@@ -856,7 +858,7 @@ bool WapacheProtocol::ReportApacheResponseStart(request_rec *r)
 
 		if(winName[0] != '\0' && method[0] != '\0') {
 			const char *pattern = apr_pstrcat(r->pool, "^", winName, "$", NULL);
-			regex_t *re = ap_pregcomp(r->pool, pattern, REG_EXTENDED|REG_ICASE);
+			ap_regex_t *re = ap_pregcomp(r->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 			if(!re) {
 		        ap_log_rerror(APLOG_MARK, APLOG_ERR, 0, r,
 							  "Cannot compile pattern '%s' in X-Line-Handler header");
@@ -883,23 +885,23 @@ bool WapacheProtocol::ReportApacheResponseStart(request_rec *r)
 			ReportProgress(BINDSTATUS_MIMETYPEAVAILABLE, ContentType);
 		}
 
-		TotalDataLen = r->clength;
+		TotalDataLen = (ULONG) r->clength;
 
 		header = apr_table_get(r->headers_out, "Content-Disposition");
 		if(header) {
-			static regex_t *attachment_regex = NULL;
-			static regex_t *filename_regex = NULL;
+			static ap_regex_t *attachment_regex = NULL;
+			static ap_regex_t *filename_regex = NULL;
 
 			if(!attachment_regex) {
-				const char *re = "^\s*attachment";
-				attachment_regex = ap_pregcomp(Application.Process->pool, re, REG_EXTENDED|REG_ICASE);
+				const char *re = "^\\s*attachment";
+				attachment_regex = ap_pregcomp(Application.Process->pool, re, AP_REG_EXTENDED | AP_REG_ICASE);
 			}
 			if(!filename_regex) {
-				const char *re = "filename\s*=\s*\"?([^\"]*)\"?";
-				filename_regex = ap_pregcomp(Application.Process->pool, re, REG_EXTENDED|REG_ICASE);
+				const char *re = "filename\\s*=\\s*\"?([^\"]*)\"?";
+				filename_regex = ap_pregcomp(Application.Process->pool, re, AP_REG_EXTENDED | AP_REG_ICASE);
 			}
 			if(ap_regexec(attachment_regex, header, 0, NULL, 0) == 0) {
-				regmatch_t matches[2];
+				ap_regmatch_t matches[2];
 				if(ap_regexec(filename_regex, header, 2, matches, 0) == 0) {
 					if(matches[1].rm_so < matches[1].rm_eo) {
 						AttachmentFilename = apr_pstrndup(Pool, header + matches[1].rm_so, matches[1].rm_eo - matches[1].rm_so);
@@ -1088,7 +1090,7 @@ const char *WapacheProtocol::CreateMenuItem(request_rec *r, const char *args, wa
 	}
 
 	const char *pattern = apr_pstrcat(r->pool, "^", winName, "$", NULL);
-	regex_t *re = ap_pregcomp(r->pool, pattern, REG_EXTENDED|REG_ICASE);
+	ap_regex_t *re = ap_pregcomp(r->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 	if(!re) {
 		return apr_psprintf(r->pool, "Cannot compile pattern '%s' ub X-Command header", pattern);
 	}
@@ -1169,7 +1171,7 @@ bool WapacheProtocol::RestoreEnvironment(request_rec *r)
 	}
 	keys = (const char **) conf->sav_env->elts;
 	keyCount = conf->sav_env->nelts;
-	for(i = 0; i < keyCount; i++) {
+	for(int i = 0; i < keyCount; i++) {
 		const char *val = Application.GetEnvironmentVar(CurrentUrl.Host, keys[i], true);
 		if(!val) {
 			val = apr_table_get(conf->def_env, keys[i]);
@@ -1220,7 +1222,7 @@ bool WapacheProtocol::SaveEnvironment(request_rec *r)
 	}
 	keys = (const char **) conf->sav_env->elts;
 	keyCount = conf->sav_env->nelts;
-	for(i = 0; i < keyCount; i++) {
+	for(int i = 0; i < keyCount; i++) {
 		const char *val = apr_table_get(r->subprocess_env, keys[i]);
 		if(val) {
 			Application.SetEnvironmentVar(CurrentUrl.Host, keys[i], val, true);

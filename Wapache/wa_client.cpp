@@ -33,7 +33,7 @@ static const char *set_reg_root(cmd_parms *cmd, void *mconfig, const char *path)
 
 	// convert forward slashes to back slashes
 	char *p = apr_pstrdup(cmd->pool, path + strlen("HKEY_CURRENT_USER/"));
-	for(i = 0; p[i] != '\0'; i++) {
+	for(int i = 0; p[i] != '\0'; i++) {
 		if(p[i] == '/') {
 			p[i] = '\\';
 		}
@@ -108,7 +108,7 @@ static const char *winsection(cmd_parms *cmd, void *mconfig, const char *arg)
     char *old_path = cmd->path;
     wa_win_config *conf;
 	wa_win_config **conf_slot;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
     const command_rec *thiscmd = cmd->cmd;
 
     errmsg = ap_check_cmd_context(cmd, GLOBAL_ONLY);
@@ -133,7 +133,7 @@ static const char *winsection(cmd_parms *cmd, void *mconfig, const char *arg)
 
 	if(cmd->path[0] != '\0') {
 		char *pattern = apr_pstrcat(cmd->temp_pool, "^", cmd->path, "$", NULL);
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -191,12 +191,12 @@ static const char * set_client_flag_slot(cmd_parms *cmd, void *dummy, int flag)
 
 const char *parse_dim(wa_win_dim *pdim, const char *arg) 
 {
-	static regex_t *dimension_regex = NULL;
+	static ap_regex_t *dimension_regex = NULL;
 	if(!dimension_regex) {
-		dimension_regex = ap_pregcomp(Application.Process->pool, "(-?\\d+)\\s*((px)|(sx)|(in)|(%))?$", REG_ICASE);
+		dimension_regex = ap_pregcomp(Application.Process->pool, "(-?\\d+)\\s*((px)|(sx)|(in)|(%))?$", AP_REG_ICASE);
 	}
 
-	regmatch_t matches[3];
+	ap_regmatch_t matches[3];
 
 	if(ap_regexec(dimension_regex, arg, 3, matches, 0) == 0) {
 		char buffer[16];
@@ -280,7 +280,7 @@ static const char *add_std_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
     wa_std_menu_item_config *conf;
 	wa_std_menu_item_config **conf_slot;
 	int idm;
-	regex_t *r = NULL;
+	ap_regex_t *r = NULL;
 
  	idm = CONSTANT_VALUE(MSHTML, item_id);
 
@@ -295,7 +295,7 @@ static const char *add_std_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -323,7 +323,7 @@ static const char *add_std_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
 	wa_std_env_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
 	int idm;
-	regex_t *r = NULL;
+	ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
     const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -346,7 +346,7 @@ static const char *add_std_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -375,7 +375,7 @@ static const char *add_url_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
     wa_url_menu_item_config *conf;
 	wa_url_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-	regex_t *r;
+	ap_regex_t *r;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
     const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -391,7 +391,7 @@ static const char *add_url_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -419,7 +419,7 @@ static const char *add_url_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
     wa_url_env_menu_item_config *conf;
 	wa_url_env_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-	regex_t *r = NULL;
+	ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
     const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -440,7 +440,7 @@ static const char *add_url_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -491,7 +491,7 @@ static const char *set_onclose(cmd_parms *cmd, wa_win_config *wconf, const char 
 {
 	wa_onclose_config *conf;
     const command_rec *thiscmd = cmd->cmd;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
 
 	const char *win_name = ap_getword_conf(cmd->pool, &args);
 	const char *method = ap_getword_conf(cmd->pool, &args);
@@ -505,7 +505,7 @@ static const char *set_onclose(cmd_parms *cmd, wa_win_config *wconf, const char 
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -539,7 +539,7 @@ static const char *add_js_menu_item(cmd_parms *cmd, wa_regular_menu_config *mcon
     wa_js_menu_item_config *conf;
 	wa_js_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
 	const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -554,7 +554,7 @@ static const char *add_js_menu_item(cmd_parms *cmd, wa_regular_menu_config *mcon
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -592,7 +592,7 @@ static const char *add_js_env_menu_item(cmd_parms *cmd, wa_regular_menu_config *
     wa_js_env_menu_item_config *conf;
 	wa_js_env_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
 	const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -609,7 +609,7 @@ static const char *add_js_env_menu_item(cmd_parms *cmd, wa_regular_menu_config *
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -649,7 +649,7 @@ static const char *add_dom_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
     wa_dom_menu_item_config *conf;
 	wa_dom_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
 	const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -666,7 +666,7 @@ static const char *add_dom_menu_item(cmd_parms *cmd, wa_regular_menu_config *mco
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -695,7 +695,7 @@ static const char *add_dom_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
     wa_dom_env_menu_item_config *conf;
 	wa_dom_env_menu_item_config **conf_slot;
     const command_rec *thiscmd = cmd->cmd;
-    regex_t *r = NULL;
+    ap_regex_t *r = NULL;
 
     const char *label = ap_getword_conf(cmd->pool, &args);
 	const char *win_name = ap_getword_conf(cmd->pool, &args);
@@ -715,7 +715,7 @@ static const char *add_dom_env_menu_item(cmd_parms *cmd, wa_regular_menu_config 
 	if(win_name[0] != '\0') {
 		const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-		r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+		r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 		if (!r) {
 			return "Regex could not be compiled";
 		}
@@ -811,10 +811,10 @@ static const char *scriptmenusection(cmd_parms *cmd, void *mconfig, const char *
 static const char *set_script_menu_method(cmd_parms *cmd, wa_script_menu_config *mconf,
                                      const char *win_name, const char *method_name)
 {
-	regex_t *r;
+	ap_regex_t *r;
 	const char *pattern = apr_pstrcat(cmd->temp_pool, "^", win_name, "$", NULL);
 
-	r = ap_pregcomp(cmd->pool, pattern, REG_EXTENDED|REG_ICASE);
+	r = ap_pregcomp(cmd->pool, pattern, AP_REG_EXTENDED | AP_REG_ICASE);
 	if (!r) {
 		return "Regex could not be compiled";
 	}

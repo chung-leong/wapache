@@ -27,7 +27,7 @@ IHTMLWindow2 *GetOriginWin(IDispatch *browser) {
 	return win;
 }
 
-WapacheDataDispatcher::WapacheDataDispatcher(regex_t *pattern, const char *method, const char *domain, const char *charSet, IDispatch *browser)
+WapacheDataDispatcher::WapacheDataDispatcher(ap_regex_t *pattern, const char *method, const char *domain, const char *charSet, IDispatch *browser)
 {
 	Buffer = NULL;
 	Index = 0;
@@ -62,7 +62,7 @@ bool WapacheDataDispatcher::Process(apr_bucket_brigade *bb)
 		apr_status_t rv;
 		rv = apr_bucket_read(first, &data, &len, APR_BLOCK_READ);
 		if(rv == APR_SUCCESS) {
-			for(int i = 0; i < len; i++) {
+			for(int i = 0; (apr_size_t) i < len; i++) {
 				if(Index >= BufferSize) {
 					BufferSize += 1024;
 					char *newBuf = new char[BufferSize];

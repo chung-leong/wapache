@@ -5,7 +5,7 @@ struct WapacheExecContext;
 
 class WapacheDataDispatcher {
 public:
-	WapacheDataDispatcher(regex_t *pattern, const char *method, const char *domain, const char *charSet, IDispatch *browser);
+	WapacheDataDispatcher(ap_regex_t *pattern, const char *method, const char *domain, const char *charSet, IDispatch *browser);
 	~WapacheDataDispatcher(void);
 
 	bool Process(apr_bucket_brigade *bb);
