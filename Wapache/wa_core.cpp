@@ -618,7 +618,10 @@ static int wa_default_handler(request_rec *r)
     }
 }
 
-static int do_nothing(request_rec *r) { return OK; }
+static int do_nothing(request_rec *r) 
+{ 
+	return OK; 
+}
 
 /**
  * Remove all zero length buckets from the brigade.
@@ -974,11 +977,13 @@ static apr_status_t wa_core_output_filter(ap_filter_t *f, apr_bucket_brigade *b)
 }
 
 
-static apr_port_t wa_core_default_port(const request_rec *r) { 
+static apr_port_t wa_core_default_port(const request_rec *r)
+{ 
 	return DEFAULT_HTTP_PORT; 
 }
 
-static int wa_core_run(apr_pool_t *_pconf, apr_pool_t *plog, server_rec *s ) {
+static int wa_core_run(apr_pool_t *_pconf, apr_pool_t *plog, server_rec *s ) 
+{
     return OK;
 }
 
@@ -1161,7 +1166,8 @@ AP_INIT_ITERATE("MonitorFiles", (cmd_func) wa_add_mon_ext, NULL, RSRC_CONF,
     { NULL }  
 };
 
-int __count_cmds(const command_rec *t) {
+int __count_cmds(const command_rec *t)
+{
 	int size = 0;
 	while(t[size].name) {
 		size++;
@@ -1169,7 +1175,8 @@ int __count_cmds(const command_rec *t) {
 	return size;
 }
 
-int __find_cmd(const command_rec *t, const char *name) {
+int __find_cmd(const command_rec *t, const char *name)
+{
 	unsigned int index = 0;
 	while(t[index].name) {
 		if(stricmp(t[index].name, name) == 0) {
@@ -1188,8 +1195,8 @@ extern "C" {
 	extern __declspec( dllimport ) module win32_module;
 }
 
-void wa_hack_core(void) {
-
+void wa_hack_core(void)
+{
 	// Apache loads these core modules by default:
 	//
 	//	core_module

@@ -153,7 +153,8 @@ void wa_report_error(const ap_errorlog_info *info, const char *errstr)
 	MessageBox(NULL, errstr, "Error", MB_OK);
 }
 
-bool WapacheApplication::InitializeApache(void) {
+bool WapacheApplication::InitializeApache(void)
+{
 	// Visual C++ specific way of getting argc and argv
 	int argc = __argc;
 	const char * const *argv = __argv;

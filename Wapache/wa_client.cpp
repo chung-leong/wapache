@@ -159,7 +159,8 @@ static const char *winsection(cmd_parms *cmd, void *mconfig, const char *arg)
 	return NULL;
 }
 
-static const char *set_win_align(cmd_parms *cmd, void *struct_ptr, const char *align) {
+static const char *set_win_align(cmd_parms *cmd, void *struct_ptr, const char *align)
+{
     int offset = (int)(long)cmd->info;
 	int *palign = (int *)((char *)struct_ptr + offset);
 
@@ -823,13 +824,15 @@ static const char *set_script_menu_method(cmd_parms *cmd, wa_script_menu_config 
 	return NULL;
 }
 
-static const char *set_title(cmd_parms *cmd, void *conf, const char *title) {
+static const char *set_title(cmd_parms *cmd, void *conf, const char *title)
+{
 	Application.ClientConf->app_title = title;
 
 	return NULL;
 }
 
-static const char *set_icon_path(cmd_parms *cmd, void *conf, const char *path) {
+static const char *set_icon_path(cmd_parms *cmd, void *conf, const char *path)
+{
 	wa_win_config *wconf;
 	wa_sticon_config *stconf;
 	char *fullpath;
