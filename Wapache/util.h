@@ -6,6 +6,10 @@ void WideStringTrim(LPCWSTR *s, LONG *len);
 char *WideStringToCStr(LPCWSTR lpWideCharStr, int cchWideChar);
 char *WideStringToPoolCStr(apr_pool_t *p, LPCWSTR lpWideCharStr, int cchWideChar);
 char *WideStringsToPoolCStr(apr_pool_t *p, LPCWSTR *ppWideCharStr, ULONG cEl, const char *delimiter);
+
+WCHAR *CStrToPoolWideString(apr_pool_t *p, LPCWSTR lpWideCharStr, int cchWideChar);
+WCHAR *CStrToPoolWideString(apr_pool_t *p, LPCWSTR *ppWideCharStr, ULONG cEl, const char *delimiter);
+
 LPOLESTR CStrToWideString(const char *s, int len);
 
 LPOLESTR BuildRequestHeaderString(request_rec *r);
@@ -19,21 +23,21 @@ const char *wa_filepath_dir_get(apr_pool_t *pool, const char *path);
 struct UrlComponents {
 	apr_pool_t *pool;
 
-	char *Scheme;
-	char *User;
-	char *Password;
-	char *Host;
-	short Port;
-	char *Path;
-	char *Query;
-	char *Fragment;
+	WCHAR *Scheme;
+	WCHAR *User;
+	WCHAR *Password;
+	WCHAR *Host;
+	WCHAR Port;
+	WCHAR *Path;
+	WCHAR *Query;
+	WCHAR *Fragment;
 
-	char *Full;
-	char *Relative;
+	WCHAR *Full;
+	WCHAR *Relative;
 };
 
-bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCSTR s);
-bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCWSTR s);
+bool ParseUrl(apr_pool_t *p, UrlComponents *url, const char *s);
+bool ParseUrl(apr_pool_t *p, UrlComponents *url, const WCHAR *s);
 
 int chdir(const char *dir);
 

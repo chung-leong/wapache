@@ -27,7 +27,7 @@ class WapacheWindow :
 	public IInternetSecurityManager
 {
 public:
-	WapacheWindow(const char *name, WapacheWindow *parent);
+	WapacheWindow(const WCHAR *name, WapacheWindow *parent);
 	~WapacheWindow(void);
 
 	HWND Handle(void)	{ return Hwnd; }
@@ -40,26 +40,26 @@ public:
 	bool CreateScriptObject(VARIANT *p);
 
 	static int ProcessKeyboardEvent(MSG *msg);
-	static bool FindWindow(const char *name, WapacheWindow **pWin);
-	static bool FindWindowWithFrame(const char *target, WapacheWindow **pWin);
-	static bool OpenUrl(const char *openerName, const char *url, const char *target, WapacheWindow **pWin);
+	static bool FindWindow(const WCHAR *name, WapacheWindow **pWin);
+	static bool FindWindowWithFrame(const WCHAR *target, WapacheWindow **pWin);
+	static bool OpenUrl(const WCHAR *openerName, const WCHAR *url, const WCHAR *target, WapacheWindow **pWin);
 
 	static void InitExecContext(WapacheExecContext *context, IHTMLDocument2 *origindoc);
-	static void InitExecContext(WapacheExecContext *context, const char *domain, const char *charSet);
+	static void InitExecContext(WapacheExecContext *context, const WCHAR *domain);
 	static void ClearExecContext(WapacheExecContext *context);
 
 	static void SetMenuItemAvailability(WapacheExecContext *context, HMENU hMenu);
 	static void ExecMenuCommand(WapacheExecContext *context, HMENU hMenu, UINT idm);
 	static void ExecMenuCommand(WapacheExecContext *context, wa_menu_item_config *item);
 
-	static void ExecJSMethod(WapacheExecContext *context, const char *method, VARIANT *arg, int argCount, VARIANT **pResults, int *pResultCount);
+	static void ExecJSMethod(WapacheExecContext *context, const WCHAR *method, VARIANT *arg, int argCount, VARIANT **pResults, int *pResultCount);
 
 	static bool BroadcastData(WapacheExecContext *context, LPOLESTR method, LPOLESTR data);
 
 	static void OnApplicationStart(void);
 	static void OnApplicationEnd(void);
 	static void OnApacheConfigChange(void);
-	static void OnDocumentRootChange(const char *domain);
+	static void OnDocumentRootChange(const WCHAR *domain);
 
 	static WapacheWindow *FirstWindow(void)	{ return WindowList; }
 	static void CloseAllWindows(WapacheWindow *win);
@@ -306,7 +306,7 @@ private:
 	void ObtainWindowSettings(void);
 	void ApplyNewSettings(void);
 	bool SetWindowIcon(void);
-	static bool HasFrame(IWebBrowser2 *browser, BSTR target);
+	static bool HasFrame(IWebBrowser2 *browser, const WCHAR *target);
 	static void CloseNextWindow(void);
 
 	void EnableWindow(BOOL enabled);
@@ -392,10 +392,10 @@ private:
 	DWORD Flags;
 	DWORD HostUIFlags;
 	CREATESTRUCT CreateStruct;
-	char IconPath[MAX_PATH + 1];
+	WCHAR IconPath[MAX_PATH + 1];
 
 	HWND Hwnd;
-	char *Name;
+	WCHAR *Name;
 	IOleObject *Control;
 	IOleInPlaceActiveObject *InPlaceObject;
 	IWebBrowser2 *Browser;
@@ -435,11 +435,10 @@ typedef void (*WapacheExecFunc)(WapacheExecContext *);
 struct WapacheExecContext {
 	DWORD Flags;
 	apr_pool_t *TemporaryPool;
-	const char *Name;
+	const WCHAR *Name;
 	ap_regex_t *Pattern;
-	const char *Scheme;
-	const char *Domain;
-	DWORD Codepage;
+	const WCHAR *Scheme;
+	const WCHAR *Domain;
 	IHTMLWindow2 *OriginWin;
 
 	WapacheExecFunc Function;

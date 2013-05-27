@@ -1382,7 +1382,7 @@ FILETIME GetContentModifiedTime(const char *dir, const char **exts, int extCount
 		HANDLE f = FindFirstFile(path, &wfd);
 		if(f != INVALID_HANDLE_VALUE) {
 			do {
-				if(strcmp(wfd.cFileName, ".") && strcmp(wfd.cFileName, "..")) {
+				if(wcscmp(wfd.cFileName, L".") && wcsrcmp(wfd.cFileName, L"..")) {
 					if(wfd.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY) {
 						if(len + strlen(wfd.cFileName) < MAX_PATH) {
 							strcpy(path + len, wfd.cFileName);

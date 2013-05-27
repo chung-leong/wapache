@@ -42,16 +42,16 @@ WapacheTrayIcon::WapacheTrayIcon(wa_sticon_config *settings)
 	Next = NULL;
 	HIcon = NULL;
 
-	IconPath = (settings->IconPath) ? strdup(settings->IconPath) : NULL;
-	ToolTip = (settings->ToolTip) ? strdup(settings->ToolTip) : NULL;
-	CharSet = strdup(settings->CharSet ? settings->CharSet : "iso-8859-1");
-	Domain = (settings->Domain) ? strdup(settings->Domain) : NULL;
+	IconPath = (settings->IconPath) ? wcsdup(settings->IconPath) : NULL;
+	ToolTip = (settings->ToolTip) ? wcsdup(settings->ToolTip) : NULL;
+	CharSet = wcsdup(settings->CharSet ? settings->CharSet : L"iso-8859-1");
+	Domain = (settings->Domain) ? wcsdup(settings->Domain) : NULL;
 	AutoExit = settings->AutoExit;
-	LeftClickMenu = (settings->LeftClickMenu) ? strdup(settings->LeftClickMenu) : NULL;
+	LeftClickMenu = (settings->LeftClickMenu) ? wcsdup(settings->LeftClickMenu) : NULL;
 	LeftClickItemIndex = settings->LeftClickItemIndex;
-	RightClickMenu = (settings->RightClickMenu) ? strdup(settings->RightClickMenu) : NULL;
+	RightClickMenu = (settings->RightClickMenu) ? wcsdup(settings->RightClickMenu) : NULL;
 	RightClickItemIndex = settings->RightClickItemIndex;
-	DoubleClickMenu = (settings->DoubleClickMenu) ? strdup(settings->DoubleClickMenu) : NULL;
+	DoubleClickMenu = (settings->DoubleClickMenu) ? wcsdup(settings->DoubleClickMenu) : NULL;
 	DoubleClickItemIndex = settings->DoubleClickItemIndex;
 }
 
@@ -83,7 +83,7 @@ bool WapacheTrayIcon::Start(void)
 		wc.hCursor = NULL;
 		wc.hbrBackground = NULL;
 		wc.lpszMenuName = NULL;
-		wc.lpszClassName = "WapacheTrayIcon";
+		wc.lpszClassName = L"WapacheTrayIcon";
 		wc.hIconSm = NULL;
 
 		ClassAtom = RegisterClassEx(&wc);
@@ -91,7 +91,7 @@ bool WapacheTrayIcon::Start(void)
 	}
 
 
-	CreateWindowEx(0, "WapacheTrayIcon", "", 0, 0, 0, 0, 0, NULL, NULL, _hinstance, reinterpret_cast<LPVOID>(this));
+	CreateWindowEx(0, L"WapacheTrayIcon", L"", 0, 0, 0, 0, 0, NULL, NULL, _hinstance, reinterpret_cast<LPVOID>(this));
 	if(!Hwnd) {
 		return false;
 	}
@@ -167,7 +167,7 @@ void WapacheTrayIcon::OnCreate(CREATESTRUCT *cs)
 	NOTIFYICONDATA niData;
 
 	// load the icon
-	const char *iconPath = IconPath;
+	const WCHAR *iconPath = IconPath;
 	if(!iconPath) {
 		iconPath = Application.ClientConf->def_icon_path;
 	}
@@ -227,7 +227,7 @@ void WapacheTrayIcon::OnDestroy(void)
 
 void WapacheTrayIcon::OnContextMenu(UINT uMsg, int x, int y)
 {
-	const char *menuName = NULL;
+	const WCHAR *menuName = NULL;
 	int menuIndex = 0;
 	HMENU hMenu = NULL;
 
@@ -247,10 +247,10 @@ void WapacheTrayIcon::OnContextMenu(UINT uMsg, int x, int y)
 	}
 
 	if(menuName) {
-		const char *domain = (Domain) ? Domain : Application.ServerConf->server_hostname;
+		const WCHAR *domain = (Domain) ? Domain : Application.ServerConf->server_hostname;
 		hMenu = Application.BuildPopupMenu(menuName);
 		WapacheExecContext e;
-		WapacheWindow::InitExecContext(&e, domain, CharSet);
+		WapacheWindow::InitExecContext(&e, domain);
 		WapacheWindow::SetMenuItemAvailability(&e, hMenu);
 		WapacheWindow::ClearExecContext(&e);
 
@@ -266,7 +266,7 @@ void WapacheTrayIcon::OnContextMenu(UINT uMsg, int x, int y)
 		}
 
 		if(cmd) {
-			WapacheWindow::InitExecContext(&e, domain, CharSet);
+			WapacheWindow::InitExecContext(&e, domain);
 			WapacheWindow::ExecMenuCommand(&e, hMenu, cmd);
 			WapacheWindow::ClearExecContext(&e);
 		}
@@ -279,13 +279,13 @@ void WapacheTrayIcon::OnMouseMove(int x, int y) {
 	if(ToolTip) {
 		apr_pool_t *pTemp;
 		apr_pool_create(&pTemp, Application.Process->pool);
-		const char *tooltip = Application.ExpandEnvironmentStr(pTemp, ToolTip, Domain);
+		const WCHAR *tooltip = Application.ExpandEnvironmentStr(pTemp, ToolTip, Domain);
 
 		NOTIFYICONDATA niData;
 
 		ZeroMemory(&niData, sizeof(niData));
 		niData.cbSize = sizeof(niData);
-		strncpy(niData.szTip, tooltip, 63);
+		wcsncpy(niData.szTip, tooltip, 63);
 		niData.uFlags |= NIF_TIP;
 		niData.hWnd = Hwnd;
 

@@ -160,7 +160,7 @@ private:
 	bool NeedFile;
 	int HttpStatusCode;
 
-	char *TempFilename;
+	WCHAR *TempFilename;
 	HANDLE TempFile;
 
 	WapacheDataDispatcher *DataDispatcher;

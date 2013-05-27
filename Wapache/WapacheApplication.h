@@ -33,33 +33,33 @@ public:
 	bool LockApacheConfig(int lockType);
 	bool UnlockApacheConfig(int lockType);
 
-	bool FindServer(const char *domain, server_rec **pServer);
+	bool FindServer(const WCHAR *domain, server_rec **pServer);
 	bool EnumServers(ServerEnumFunc func, void *data);
 	bool IsInternalAddress(LPOLESTR url);
-	void GetEnvironmentVarType(const char *domain, const char *key, bool *isSession, bool *isPersistent);
+	void GetEnvironmentVarType(const WCHAR *domain, const WCHAR *key, bool *isSession, bool *isPersistent);
 
-	wa_win_config *GetWindowSettings(const char *name);
-	HMENU BuildMenu(const char *menuName, IDispatch *target, bool popup);
-	HMENU BuildPopupMenu(const char *menuName, IDispatch *target = NULL) { return BuildMenu(menuName, target, true); };
-	HMENU BuildDropdownMenu(const char *menuName) { return BuildMenu(menuName, NULL, false); };
+	wa_win_config *GetWindowSettings(const WCHAR *name);
+	HMENU BuildMenu(const WCHAR *menuName, IDispatch *target, bool popup);
+	HMENU BuildPopupMenu(const WCHAR *menuName, IDispatch *target = NULL) { return BuildMenu(menuName, target, true); };
+	HMENU BuildDropdownMenu(const WCHAR *menuName) { return BuildMenu(menuName, NULL, false); };
 	wa_menu_item_config *FindMenuItem(UINT id);
 	bool AddScriptMenuItems(HMENU hMenu, VARIANT *items, UINT *pId);
 	void DestroyMenu(HMENU hMenu);
 
 	bool LockApacheEnv(int lockType);
 	bool UnlockApacheEnv(int lockType);
-	const char *GetEnvironmentVar(const char *domain, const char *key, bool persistent);
-	void SetEnvironmentVar(const char *domain, const char *key, const char *value, bool persistent);
-	bool CompareEnvironmentVar(const char *domain, const char *key, const char *value);
-	const char *ExpandEnvironmentStr(apr_pool_t *pool, const char *s, const char *domain);
+	const WCHAR *GetEnvironmentVar(const WCHAR *domain, const WCHAR *key, bool persistent);
+	void SetEnvironmentVar(const WCHAR *domain, const WCHAR *key, const WCHAR *value, bool persistent);
+	bool CompareEnvironmentVar(const WCHAR *domain, const WCHAR *key, const WCHAR *value);
+	const WCHAR *ExpandEnvironmentStr(apr_pool_t *pool, const WCHAR *s, const WCHAR *domain);
 
 	bool LockCookieTable(int lockType);
 	bool UnlockCookieTable(int lockType);
-	const char *GetCookie(const char *domain);
-	void SetCookie(const char *domain, const char *cookie);
+	const WCHAR *GetCookie(const WCHAR *domain);
+	void SetCookie(const WCHAR *domain, const WCHAR *cookie);
 
 	DWORD GetCharsetCode(BSTR charset);
-	DWORD GetCharsetCode(const char *charset);
+	DWORD GetCharsetCode(const WCHAR *charset);
 	LPOLESTR ConvertString(DWORD code, const char *s, int len);
 
 private:
@@ -83,13 +83,13 @@ private:
 	void UninstallPrivateFonts(void);
 	 
 	// get environment variables from registry
-	bool RetrieveSavedEnvironment(HKEY hKey, const char *domain);
+	bool RetrieveSavedEnvironment(HKEY hKey, const WCHAR *domain);
 	bool RetrieveSavedEnvironments(void);
 	// get cookies from registery
 	bool RetrieveSavedCookies(void);
 
 	// add folder locations to environment
-	void ExposeSpecialFolder(const char *envName, int CSIDL);
+	void ExposeSpecialFolder(const WCHAR *envName, int CSIDL);
 	void ExposeSpecialFolders(void);
 
 	// monitor the configuration file for changes

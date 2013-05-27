@@ -15,22 +15,22 @@ struct wa_client_config {
 	apr_array_header_t *initial_urls;
 	apr_array_header_t *fonts;
 	short next_cmd_id;
-	const char *reg_save_path;
-	const char *def_icon_path;
+	const WCHAR *reg_save_path;
+	const WCHAR *def_icon_path;
 	BOOL Javascript;
 	BOOL Java;
 	BOOL ActiveX;
 	BOOL external;
 	BOOL Theme;
-	const char *app_title;
+	const WCHAR *app_title;
 };
 
 struct wa_process_rec : public process_rec {
 	apr_pool_t *plog;
-	const char *bin_root;
-	const char *conf_name;
-	const char *conf_root;
-	const char *conf_short_name;
+	const WCHAR *bin_root;
+	const WCHAR *conf_name;
+	const WCHAR *conf_root;
+	const WCHAR *conf_short_name;
 };
 
 struct wa_server_rec : public server_rec {
@@ -71,7 +71,7 @@ enum {
 };
 
 struct wa_onclose_config {
-	const char *Method;
+	const WCHAR *Method;
 	ap_regex_t *Pattern;
 	apr_array_header_t *Args;	
 };
@@ -79,15 +79,15 @@ struct wa_onclose_config {
 struct wa_win_config {
 	ap_regex_t *TargetPattern;
 
-	const char *IconPath;
+	const WCHAR *IconPath;
 
-	const char *DropDownMenu;
-	const char *DefaultMenu;
-	const char *ImageMenu;
-	const char *ControlMenu;
-	const char *TableMenu;
-	const char *TextSelectMenu;
-	const char *AnchorMenu;
+	const WCHAR *DropDownMenu;
+	const WCHAR *DefaultMenu;
+	const WCHAR *ImageMenu;
+	const WCHAR *ControlMenu;
+	const WCHAR *TableMenu;
+	const WCHAR *TextSelectMenu;
+	const WCHAR *AnchorMenu;
 
 	int VertAlign;
 	int HorizAlign;
@@ -133,8 +133,7 @@ enum {
 
 struct wa_menu_config {
 	int Type;
-	const char *Name;
-	const char *Charset;
+	const WCHAR *Name;
 };
 
 struct wa_regular_menu_config : public wa_menu_config {
@@ -142,7 +141,7 @@ struct wa_regular_menu_config : public wa_menu_config {
 };
 
 struct wa_script_menu_config : public wa_menu_config {
-	const char *Method;
+	const WCHAR *Method;
 	ap_regex_t *Pattern;
 };
 
@@ -161,14 +160,14 @@ enum {
 };
 
 struct wa_initial_url_config {
-	const char *Opener;
-	const char *Url;
-	const char *Target;
+	const WCHAR *Opener;
+	const WCHAR *Url;
+	const WCHAR *Target;
 };
 
 struct wa_menu_item_config {
 	int Type;
-	const char *Label;
+	const WCHAR *Label;
 	UINT Id;
 	ap_regex_t *Pattern;
 };
@@ -178,61 +177,61 @@ struct wa_std_menu_item_config : public wa_menu_item_config {
 };
 
 struct wa_std_env_menu_item_config : public wa_std_menu_item_config {
-	const char *EnvVarName;
-	const char *EnvVarVal;
+	const WCHAR *EnvVarName;
+	const WCHAR *EnvVarVal;
 };
 
 struct wa_url_menu_item_config : public wa_menu_item_config {
-	const char *Url;
-	const char *Target;
+	const WCHAR *Url;
+	const WCHAR *Target;
 };
 
 struct wa_url_env_menu_item_config : public wa_url_menu_item_config {
-	const char *EnvVarName;
-	const char *EnvVarVal;
+	const WCHAR *EnvVarName;
+	const WCHAR *EnvVarVal;
 };
 
 struct wa_js_menu_item_config : public wa_menu_item_config {
-	const char *Method;
+	const WCHAR *Method;
 	apr_array_header_t *Args;	
 };
 
 struct wa_js_env_menu_item_config : public wa_js_menu_item_config {
-	const char *EnvVarName;
-	const char *EnvVarVal;
+	const WCHAR *EnvVarName;
+	const WCHAR *EnvVarVal;
 };
 
 struct wa_dom_menu_item_config : public wa_menu_item_config {
-	const char *ElemId;
-	const char *PropName;
-	const char *PropVal;
+	const WCHAR *ElemId;
+	const WCHAR *PropName;
+	const WCHAR *PropVal;
 };
 
 struct wa_dom_env_menu_item_config : public wa_dom_menu_item_config {
-	const char *EnvVarName;
-	const char *EnvVarVal;
+	const WCHAR *EnvVarName;
+	const WCHAR *EnvVarVal;
 };
 
 struct wa_sub_menu_config : public wa_menu_item_config {
-	const char *Name;
+	const WCHAR *Name;
 };
 
 struct wa_sticon_config {
-	const char *IconPath;
-	const char *ToolTip;
-	const char *CharSet;
-	const char *Domain;
+	const WCHAR *IconPath;
+	const WCHAR *ToolTip;
+	const WCHAR *CharSet;
+	const WCHAR *Domain;
 	bool AutoExit;
-	const char *LeftClickMenu;
+	const WCHAR *LeftClickMenu;
 	int LeftClickItemIndex;
-	const char *RightClickMenu;
+	const WCHAR *RightClickMenu;
 	int RightClickItemIndex;
-	const char *DoubleClickMenu;
+	const WCHAR *DoubleClickMenu;
 	int DoubleClickItemIndex;
 };
 
 struct wa_font_config {
-	const char *FilePath;
+	const WCHAR *FilePath;
 };
 
 void wa_hack_core(void);

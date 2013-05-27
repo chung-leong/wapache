@@ -8,10 +8,10 @@ ATOM WapacheWindow::ClassAtom = 0;
 WapacheWindow *WapacheWindow::WindowList = NULL;
 WapacheWindow *WapacheWindow::LastWindowToClose = NULL;
 
-WapacheWindow::WapacheWindow(const char *name, WapacheWindow *parent) 
+WapacheWindow::WapacheWindow(const WCHAR *name, WapacheWindow *parent) 
 {
 	RefCount = 0;
-	Name = strdup(name);
+	Name = wcsdup(name);
 	Hwnd = NULL;
 	Parent = parent;
 	Control = NULL;
@@ -54,13 +54,13 @@ bool WapacheWindow::Start(void) {
 		wc.hCursor = NULL;
 		wc.hbrBackground = NULL;
 		wc.lpszMenuName = NULL;
-		wc.lpszClassName = "Wapache";
+		wc.lpszClassName = L"Wapache";
 
 		ClassAtom = RegisterClassEx(&wc);
 	}
 
 	ObtainWindowSettings();
-	CreateWindowEx(CreateStruct.dwExStyle, "Wapache", "", CreateStruct.style, CreateStruct.x, CreateStruct.y, CreateStruct.cx, CreateStruct.cy, CreateStruct.hwndParent, CreateStruct.hMenu, CreateStruct.hInstance, reinterpret_cast<LPVOID>(this));
+	CreateWindowEx(CreateStruct.dwExStyle, L"Wapache", L"", CreateStruct.style, CreateStruct.x, CreateStruct.y, CreateStruct.cx, CreateStruct.cy, CreateStruct.hwndParent, CreateStruct.hMenu, CreateStruct.hInstance, reinterpret_cast<LPVOID>(this));
 	if(!Hwnd || !Browser) {
 		return false;
 	}
@@ -72,8 +72,8 @@ void WapacheWindow::ApplyNewSettings(void) {
 	DWORD oldFlags = Flags;
 	DWORD oldHostUIFlags = HostUIFlags;
 	POINT oldCornerRadii = CornerRadii;
-	char oldIconPath[MAX_PATH + 1];
-	strcpy(oldIconPath, IconPath);
+	WCHAR oldIconPath[MAX_PATH + 1];
+	wcscpy(oldIconPath, IconPath);
 	HWND oldParent = GetParent(Hwnd);
 
 	// can't change from an owned window to an un-owned window or vice-versa
@@ -106,7 +106,7 @@ void WapacheWindow::ApplyNewSettings(void) {
 	Application.DestroyMenu(oldCreateStruct.hMenu);
 
 	// new icon
-	if(stricmp(oldIconPath, IconPath) != 0) {
+	if(wcsicmp(oldIconPath, IconPath) != 0) {
 		SetWindowIcon();
 	}
 
@@ -480,14 +480,14 @@ void WapacheWindow::ObtainWindowSettings(void)
 	}
 
 	// copy the icon path
-	const char *iconPath = "";
+	const WCHAR *iconPath = L"";
 	if(conf->IconPath) {
 		iconPath = conf->IconPath;
 	}
 	else if(Application.ClientConf->def_icon_path && conf->Type == STANDARD_WINDOW) {
 		iconPath = Application.ClientConf->def_icon_path;
 	}
-	strncpy(IconPath, iconPath, MAX_PATH);
+	wcsncpy(IconPath, iconPath, MAX_PATH);
 	IconPath[MAX_PATH] = '\0';	
 
 	CreateStruct.hInstance = _hinstance;
@@ -647,8 +647,8 @@ void WapacheWindow::OnApplicationStart(void)
 	wa_initial_url_config **links = (wa_initial_url_config **) Application.ClientConf->initial_urls->elts;
 	int count = Application.ClientConf->initial_urls->nelts;
 	for(int i = 0; i < count; i++) {
-		const char *name = (links[i]->Target) ? links[i]->Target : "";
-		const char *openerName = (links[i]->Opener) ? links[i]->Opener : "_app";
+		const WCHAR *name = (links[i]->Target) ? links[i]->Target : L"";
+		const WCHAR *openerName = (links[i]->Opener) ? links[i]->Opener : L"_app";
 
 		WapacheWindow *win;
 		if(OpenUrl(openerName, links[i]->Url, name, &win)) {
@@ -681,7 +681,7 @@ void WapacheWindow::OnApacheConfigChange(void)
 	}
 }
 
-void WapacheWindow::OnDocumentRootChange(const char *domain) {
+void WapacheWindow::OnDocumentRootChange(const WCHAR *domain) {
 	if(WindowList) {
 		WapacheWindow *win = WindowList;
 		// refresh completely
@@ -700,7 +700,7 @@ bool WapacheWindow::SetWindowIcon(void)
 {
 	bool success = false;
 	// load the icon
-	if(strlen(IconPath) > 0) {
+	if(wcslen(IconPath) > 0) {
 		int smIconX = GetSystemMetrics(SM_CXSMICON);
 		int smIconY = GetSystemMetrics(SM_CYSMICON);
 		int iconX = GetSystemMetrics(SM_CXICON);
@@ -848,19 +848,19 @@ bool WapacheWindow::ExecOnCloseHandler(WapacheExecContext *context) {
 	wa_onclose_config *onclose = conf->OnClose;
 	if(onclose) {
 		int argc;
-		const char **argv;
+		const WCHAR **argv;
 		VARIANT *argvV;
 		if(onclose->Args) {
-			argv = reinterpret_cast<const char **>(onclose->Args->elts);
+			argv = reinterpret_cast<const WCHAR **>(onclose->Args->elts);
 			argc = onclose->Args->nelts;
 
 			Application.LockApacheEnv(READ_LOCK);
 			argvV = new VARIANTARG[argc];
 			for(int i = 0, j = argc - 1; i < argc; i++, j--) {
-				const char *arg = Application.ExpandEnvironmentStr(context->TemporaryPool, argv[i], context->Domain);
+				const WCHAR *arg = Application.ExpandEnvironmentStr(context->TemporaryPool, argv[i], context->Domain);
 				VariantInit(&argvV[j]);
 				V_VT(&argvV[j]) = VT_BSTR;
-				V_BSTR(&argvV[j]) = Application.ConvertString(context->Codepage, arg, -1);
+				V_BSTR(&argvV[j]) = SysAllocString(arg);
 			}
 			Application.UnlockApacheEnv(READ_LOCK);
 		} else {
@@ -1151,7 +1151,7 @@ void WapacheWindow::OnBeforeNavigate(
 	}
 	else {
 		char *cmd = WideStringToCStr(V_BSTR(url), -1);
-		ShellExecute(Hwnd, "open", cmd, NULL, NULL, SW_SHOWNORMAL);
+		ShellExecute(Hwnd, L"open", V_BSTR(url), NULL, NULL, SW_SHOWNORMAL);
 		delete[] cmd;
 		*Cancel = true;
 	}
@@ -1176,9 +1176,7 @@ void WapacheWindow::OnDocumentComplete(
 			doc->Release();
 		}
 		if(win) {
-			LPOLESTR nameW = CStrToWideString(Name, -1);
-			hr = win->put_name(nameW);
-			SysFreeString(nameW);
+			hr = win->put_name(Name);
 			win->Release();
 		}
 		Flags &= ~UNNAMED;
@@ -1219,43 +1217,40 @@ void WapacheWindow::OnNewWindow(
 {
 	// don't open new window for external links
 	if(!Application.IsInternalAddress(Url)) {
-		char *cmd = WideStringToCStr(Url, -1);
-		ShellExecute(Hwnd, "open", cmd, NULL, NULL, SW_SHOWNORMAL);
-		delete[] cmd;
+		ShellExecute(Hwnd, L"open", Url, NULL, NULL, SW_SHOWNORMAL);
 		*Cancel = true;
 		return;
 	}
 
 	// IE 5.5+ adds a random string like _[343] to the target name
 	// (security fix of some sort?)
-	LPOLESTR nameW = wcschr(TargetFrameName, ']');
-	if(nameW) {
-		nameW++;
-	}
+	LPOLESTR name = wcschr(TargetFrameName, ']');
+	if(name) {
+		name++;
+	} 
 	else {
-		nameW = TargetFrameName;
+		name = TargetFrameName;
 	}
 
 	// when target is "_blank"
-	if(wcsncmp(nameW, L"_No__Name", 8) == 0) {
-		nameW = NULL;
+	if(wcsncmp(name, L"_No__Name", 8) == 0) {
+		name = NULL;
 	}
 
 	WapacheWindow *win = NULL;
-	char *name = WideStringToCStr(nameW, -1);
 
-	if(nameW) {
+	if(name) {
 		VARIANT flagsV;
 		VARIANT nameV;
 		VARIANT headersV;
 
 		V_VT(&flagsV) = VT_I4; V_I4(&flagsV) = Flags;
-		V_VT(&nameV) = VT_BSTR; V_BSTR(&nameV) = nameW;
+		V_VT(&nameV) = VT_BSTR; V_BSTR(&nameV) = SysAllocString(name);
 		V_VT(&headersV) = VT_BSTR; V_BSTR(&headersV) = Headers;
 
 		// look at the window's own frames first
-		if(HasFrame(Browser, nameW)) {
-			//Browser->Navigate(Url, FlagsV, nameV, *postDataV, headersV);
+		if(HasFrame(Browser, name)) {
+			//Browser->Navigate(Url, flagsV, nameV, *PostDataV, headersV);
 			*Cancel = false;
 			return;
 		}
@@ -1266,20 +1261,17 @@ void WapacheWindow::OnNewWindow(
 			win->Focus();
 			win->Release();
 			*ppDisp = win->Browser;	
-			delete[] name;
 			return;
 		}
 		if(FindWindowWithFrame(name, &win)) {
 			win->Browser->Navigate(Url, &flagsV, &nameV, PostData, &headersV);
-
-			delete[] name;
 			*Cancel = true;
 			return;
 		}
 	}
 
 	// can't find window--create it
-	win = new WapacheWindow((name) ? name : "", this);
+	win = new WapacheWindow((name) ? name : L"", this);
 	if(win->Start()) {
 		win->Browser->AddRef();
 		*ppDisp = win->Browser;	
@@ -1287,7 +1279,6 @@ void WapacheWindow::OnNewWindow(
 	else {
 		*Cancel = true;
 	}
-	delete[] name;
 }
 
 void WapacheWindow::OnTitleChange(BSTR title)
@@ -1877,14 +1868,14 @@ bool WapacheWindow::CheckExecContext(WapacheExecContext *context)
 
 	if(!(context->Flags & DONT_CHECK_SCHEME)) {
 		// check the scheme
-		if(stricmp(context->Scheme, loc.Scheme) != 0) {
+		if(wcsicmp(context->Scheme, loc.Scheme) != 0) {
 			return false;
 		}
 	}
 
 	if(!(context->Flags & DONT_CHECK_DOMAIN)) {
 		// check the domain
-		if(stricmp(context->Domain, loc.Host) != 0) {
+		if(wcsicmp(context->Domain, loc.Host) != 0) {
 			return false;
 		}
 	}
@@ -1944,12 +1935,12 @@ void WapacheWindow::Dispatch(WapacheExecContext *context, IWebBrowser2 *browser)
 	}
 }
 
-bool WapacheWindow::FindWindow(const char *name, WapacheWindow **pWin)
+bool WapacheWindow::FindWindow(const WCHAR *name, WapacheWindow **pWin)
 {
 	if(WindowList) {
 		WapacheWindow *win = WindowList;
 		do {
-			if(stricmp(win->Name, name) == 0) {
+			if(wcsicmp(win->Name, name) == 0) {
 				win->AddRef();
 				*pWin = win;
 				return true;
@@ -1960,26 +1951,23 @@ bool WapacheWindow::FindWindow(const char *name, WapacheWindow **pWin)
 	return false;
 }
 
-bool WapacheWindow::FindWindowWithFrame(const char *name, WapacheWindow **pWin)
+bool WapacheWindow::FindWindowWithFrame(const WCHAR *name, WapacheWindow **pWin)
 {
-	BSTR targetW = CStrToWideString(name, -1);
 	if(WindowList) {
 		WapacheWindow *win = WindowList;
 		do {
-			if(HasFrame(win->Browser, targetW)) {
+			if(HasFrame(win->Browser, name)) {
 				win->AddRef();
 				*pWin = win;
-				SysFreeString(targetW);
 				return true;
 			}
 			win = win->Next;
 		} while(win != WindowList);
 	}
-	SysFreeString(targetW);
 	return false;
 }
 
-bool WapacheWindow::HasFrame(IWebBrowser2 *browser, BSTR target)
+bool WapacheWindow::HasFrame(IWebBrowser2 *browser, const WCHAR *target)
 {
 	HRESULT hr;
 	bool hasFrame = false;
@@ -2026,13 +2014,12 @@ bool WapacheWindow::HasFrame(IWebBrowser2 *browser, BSTR target)
 	return hasFrame;
 }
 
-bool WapacheWindow::OpenUrl(const char *openerName, const char *url, const char *target, WapacheWindow **pWin)
+bool WapacheWindow::OpenUrl(const WCHAR *openerName, const WCHAR *url, const WCHAR *target, WapacheWindow **pWin)
 {
 	*pWin = NULL;
-	LPWSTR urlW = CStrToWideString(url, -1);
 
 	// find the opener
-	if(stricmp(openerName, "_app") == 0) {
+	if(wcsicmp(openerName, L"_app") == 0) {
 		if(FindWindow(target, pWin) || FindWindowWithFrame(target, pWin)) {
 			(*pWin)->Focus();
 		}
@@ -2044,7 +2031,7 @@ bool WapacheWindow::OpenUrl(const char *openerName, const char *url, const char 
 			}
 		}
 		if(*pWin) {
-			(*pWin)->Browser->Navigate(urlW, NULL, NULL, NULL, NULL);
+			(*pWin)->Browser->Navigate((BSTR) url, NULL, NULL, NULL, NULL);
 		}
 	}
 	else {
@@ -2052,13 +2039,11 @@ bool WapacheWindow::OpenUrl(const char *openerName, const char *url, const char 
 			VARIANT targetV;
 			VariantInit(&targetV);
 			V_VT(&targetV) = VT_BSTR;
-			V_BSTR(&targetV) = CStrToWideString(target, -1);
-			(*pWin)->Browser->Navigate(urlW, NULL, &targetV, NULL, NULL);
+			V_BSTR(&targetV) = SysAllocString(target);
+			(*pWin)->Browser->Navigate((BSTR) url, NULL, &targetV, NULL, NULL);
 			VariantClear(&targetV);
 		}
 	}
-
-	SysFreeString(urlW);
 
 	return (*pWin != NULL);
 }
@@ -2088,47 +2073,29 @@ void WapacheWindow::InitExecContext(WapacheExecContext *context, IHTMLDocument2 
 
 	// parse the URL of the origin doc to see in which windows the
 	// operation should proceed and how to expand environment strings
-	BSTR oUrlW;
-	hr = originDoc->get_URL(&oUrlW);
+	BSTR oUrl;
+	hr = originDoc->get_URL(&oUrl);
 	if(hr == S_OK) {
-		char *oUrl = WideStringToPoolCStr(context->TemporaryPool, oUrlW, -1);
 		UrlComponents oLoc;
 		if(ParseUrl(context->TemporaryPool, &oLoc, oUrl)) {
-			context->Scheme = oLoc.Scheme;
-			context->Domain = oLoc.Host;
+			context->Scheme = CStrToPoolWideString(context->TemporaryPool, oLoc.Scheme, -1);
+			context->Domain = CStrToPoolWideString(context->TemporaryPool, oLoc.Host, -1);
 		}
-		SysFreeString(oUrlW);
 	}
 
 	hr = originDoc->get_parentWindow(&context->OriginWin);
-
-	// get the codepage id of the origin doc
-	// the assumption is that it's the same one used for environment variables
-	// as well as text in the config file
-	BSTR charSet;
-	hr = originDoc->get_charset(&charSet);
-	if(hr == S_OK) {
-		context->Codepage = Application.GetCharsetCode(charSet);
-		SysFreeString(charSet);
-	}
 }
 
-void WapacheWindow::InitExecContext(WapacheExecContext *context, const char *domain, const char *charSet)
+void WapacheWindow::InitExecContext(WapacheExecContext *context, const WCHAR *domain)
 {
 	ZeroMemory(context, sizeof(WapacheExecContext));
 
 	// create a temporary pool for string operations
 	apr_pool_create(&context->TemporaryPool, Application.Process->pool);
 
-	context->Scheme = "http";
+	context->Scheme = L"http";
 	context->Domain = domain;
-
 	context->OriginWin = NULL;
-
-	BSTR charSetW;
-	charSetW = CStrToWideString(charSet, -1);
-	context->Codepage = Application.GetCharsetCode(charSetW);
-	SysFreeString(charSetW);
 }
 
 
@@ -2334,7 +2301,7 @@ void WapacheWindow::ExecStdEnvCommand(WapacheExecContext *context, wa_menu_item_
 typedef BOOL (*ExecScriptMethodCallback)(void*, VARIANT*);
 
 struct ExecScriptMethodParams {
-	LPOLESTR Method;
+	const WCHAR *Method;
 	DISPPARAMS *Arguments;
 	WORD Flags;
 	ExecScriptMethodCallback Callback;
@@ -2355,7 +2322,7 @@ void InvokeScriptMethod(WapacheExecContext *context)
 	if(hr == S_OK) {
 		ExecScriptMethodParams *p = reinterpret_cast<ExecScriptMethodParams *>(context->Data); 
 		DISPID dispId;
-		hr = script->GetIDsOfNames(IID_NULL, &p->Method, 1, 0x0409, &dispId);
+		hr = script->GetIDsOfNames(IID_NULL, (LPOLESTR *) &p->Method, 1, 0x0409, &dispId);
 		if(hr == S_OK) {
 			if(!(context->Flags & TEST_DONT_EXEC)) {
 				VARIANT ret;
@@ -2390,29 +2357,27 @@ void WapacheWindow::ExecJSCommand(WapacheExecContext *context, wa_menu_item_conf
 {
 	wa_js_menu_item_config *jItem = reinterpret_cast<wa_js_menu_item_config *>(item);
 	apr_pool_t *pTemp = context->TemporaryPool;
-	const char *domain = context->Domain;
-	DWORD codepage = context->Codepage;
+	const WCHAR *domain = context->Domain;
 
 	// lock the environment first
 	Application.LockApacheEnv(READ_LOCK);
 
 	// expand the method name and convert it to Unicode
-	const char *method = Application.ExpandEnvironmentStr(pTemp, jItem->Method, domain);
-	LPOLESTR methodW = Application.ConvertString(codepage, method, -1);
+	const WCHAR *method = Application.ExpandEnvironmentStr(pTemp, jItem->Method, domain);
 
 	// expand the arguments and convert then to Unicode
-	const char **argv;
+	const WCHAR **argv;
 	int argc;
 	VARIANTARG *argvV;
 	if(!(context->Flags & TEST_DONT_EXEC) && jItem->Args) {
-		argv = reinterpret_cast<const char **>(jItem->Args->elts);
+		argv = reinterpret_cast<const WCHAR **>(jItem->Args->elts);
 		argc = jItem->Args->nelts;
 		argvV = new VARIANTARG[argc];
 		for(int i = 0, j = argc - 1; i < argc; i++, j--) {
-			const char *arg = Application.ExpandEnvironmentStr(pTemp, argv[i], domain);
+			const WCHAR *arg = Application.ExpandEnvironmentStr(pTemp, argv[i], domain);
 			VariantInit(&argvV[j]);
 			V_VT(&argvV[j]) = VT_BSTR;
-			V_BSTR(&argvV[j]) = Application.ConvertString(codepage, arg, -1);
+			V_BSTR(&argvV[j]) = SysAllocString(arg);
 		}
 	}
 	else {
@@ -2432,7 +2397,7 @@ void WapacheWindow::ExecJSCommand(WapacheExecContext *context, wa_menu_item_conf
 
 	// set the callback function and param
 	ExecScriptMethodParams p;
-	p.Method = methodW;
+	p.Method = method;
 	p.Arguments = &dispParams;
 	p.Flags = DISPATCH_METHOD;
 	p.Callback = NULL;
@@ -2446,14 +2411,12 @@ void WapacheWindow::ExecJSCommand(WapacheExecContext *context, wa_menu_item_conf
 	for(int i = 0; i < argc; i++) {
 		VariantClear(&argvV[i]);
 	}
-	SysFreeString(methodW);
 }
 
-void WapacheWindow::ExecJSMethod(WapacheExecContext *context, const char *method, VARIANT *arg, int argCount, VARIANT **pResults, int *pResultCount) {
+void WapacheWindow::ExecJSMethod(WapacheExecContext *context, const WCHAR *method, VARIANT *arg, int argCount, VARIANT **pResults, int *pResultCount) {
 	// expand the method name and convert it to Unicode
 	Application.LockApacheEnv(READ_LOCK);
-	const char *methode = Application.ExpandEnvironmentStr(context->TemporaryPool, method, context->Domain);
-	LPOLESTR methodW = Application.ConvertString(context->Codepage, methode, -1);
+	const WCHAR *methode = Application.ExpandEnvironmentStr(context->TemporaryPool, method, context->Domain);
 	Application.UnlockApacheEnv(READ_LOCK);
 
 	DISPPARAMS dispParams;
@@ -2467,7 +2430,7 @@ void WapacheWindow::ExecJSMethod(WapacheExecContext *context, const char *method
 
 	// set the callback function and param
 	ExecScriptMethodParams p;
-	p.Method = methodW;
+	p.Method = methode;
 	p.Arguments = &dispParams;
 	p.Flags = DISPATCH_METHOD;
 	p.Callback = SaveResult;
@@ -2477,7 +2440,6 @@ void WapacheWindow::ExecJSMethod(WapacheExecContext *context, const char *method
 
 	// broadcast the command to all windows
 	Broadcast(context);
-	SysFreeString(methodW);
 
 	*pResults = (VARIANT *) results->elts;
 	*pResultCount = results->nelts;
@@ -2544,7 +2506,7 @@ void WapacheWindow::ExecJSEnvCommand(WapacheExecContext *context, wa_menu_item_c
 
 struct InvokeDOMMethodParams {
 	VARIANT Id;
-	LPOLESTR Method;
+	const WCHAR *Method;
 	DISPPARAMS *Arguments;
 	WORD Flags;
 };
@@ -2566,7 +2528,7 @@ void InvokeDOMMethod(WapacheExecContext *context)
 	}
 	if(hr == S_OK && elDisp) {
 		DISPID dispId;
-		hr = elDisp->GetIDsOfNames(IID_NULL, &p->Method, 1, 0x0409, &dispId);
+		hr = elDisp->GetIDsOfNames(IID_NULL, (LPOLESTR *) &p->Method, 1, 0x0409, &dispId);
 		if(hr == S_OK) {
 			if(!(context->Flags & TEST_DONT_EXEC)) {
 				hr = elDisp->Invoke(dispId, IID_NULL, 0x0409, p->Flags, p->Arguments, NULL, NULL, NULL);
@@ -2583,29 +2545,23 @@ void WapacheWindow::ExecDOMCommand(WapacheExecContext *context, wa_menu_item_con
 {
 	wa_dom_menu_item_config *dItem = reinterpret_cast<wa_dom_menu_item_config *>(item);
 	apr_pool_t *pTemp = context->TemporaryPool;
-	const char *domain = context->Domain;
-	DWORD codepage = context->Codepage;
+	const WCHAR *domain = context->Domain;
 
 	// expand all strings
 	Application.LockApacheEnv(READ_LOCK);
-	const char *id = Application.ExpandEnvironmentStr(pTemp, dItem->ElemId, domain);
-	const char *prop = Application.ExpandEnvironmentStr(pTemp, dItem->PropName, domain);
-	const char *value = Application.ExpandEnvironmentStr(pTemp, dItem->PropVal, domain);
+	const WCHAR *id = Application.ExpandEnvironmentStr(pTemp, dItem->ElemId, domain);
+	const WCHAR *prop = Application.ExpandEnvironmentStr(pTemp, dItem->PropName, domain);
+	const WCHAR *value = Application.ExpandEnvironmentStr(pTemp, dItem->PropVal, domain);
 	Application.UnlockApacheEnv(READ_LOCK);
-
-	// convert them to Unicode
-	LPOLESTR idW = Application.ConvertString(codepage, id, -1);
-	LPOLESTR propW = Application.ConvertString(codepage, prop, -1);
-	LPOLESTR valueW = Application.ConvertString(codepage, value, -1);
 
 	// the id and value need to be variants
 	VARIANT idV, valueV;
 	VariantInit(&idV);
 	VariantInit(&valueV);
 	V_VT(&idV) = VT_BSTR;
-	V_BSTR(&idV) = idW;
+	V_BSTR(&idV) = SysAllocString(id);
 	V_VT(&valueV) = VT_BSTR;
-	V_BSTR(&valueV) = valueW;
+	V_BSTR(&valueV) = SysAllocString(value);
 
 	DISPPARAMS dispParams;
 	dispParams.cNamedArgs = 0;
@@ -2616,7 +2572,7 @@ void WapacheWindow::ExecDOMCommand(WapacheExecContext *context, wa_menu_item_con
 	// set the callback
 	InvokeDOMMethodParams p;
 	p.Id = idV;
-	p.Method = propW;
+	p.Method = prop;
 	p.Arguments = &dispParams;
 	p.Flags = DISPATCH_PROPERTYPUT;
 	context->Function = InvokeDOMMethod;
@@ -2625,7 +2581,6 @@ void WapacheWindow::ExecDOMCommand(WapacheExecContext *context, wa_menu_item_con
 	Broadcast(context);
 
 	VariantClear(&idV);
-	SysFreeString(propW);
 	VariantClear(&valueV);
 }
 
@@ -2653,8 +2608,8 @@ void WapacheWindow::ExecDOMEnvCommand(WapacheExecContext *context, wa_menu_item_
 }
 
 struct NavigateToUrlParams {
-	LPOLESTR Url;
-	LPOLESTR Target;
+	const WCHAR *Url;
+	const WCHAR *Target;
 };
 
 void NavigateToUrl(WapacheExecContext *context) 
@@ -2664,8 +2619,9 @@ void NavigateToUrl(WapacheExecContext *context)
 		VARIANT targetV;
 		VariantInit(&targetV);
 		V_VT(&targetV) = VT_BSTR;
-		V_BSTR(&targetV) = p->Target;
-		context->Browser->Navigate(p->Url, NULL, &targetV, NULL, NULL);
+		V_BSTR(&targetV) = SysAllocString(p->Target);
+		context->Browser->Navigate((BSTR) p->Url, NULL, &targetV, NULL, NULL);
+		VariantClear(&targetV);
 	}
 	else {
 		context->Result |= ITEM_AVAILABLE;
@@ -2676,29 +2632,24 @@ void WapacheWindow::ExecUrlCommand(WapacheExecContext *context, wa_menu_item_con
 {
 	wa_url_menu_item_config *uItem = reinterpret_cast<wa_url_menu_item_config *>(item);
 	apr_pool_t *pTemp = context->TemporaryPool;
-	const char *domain = context->Domain;
-	DWORD codepage = context->Codepage;
-	const char *url;
-	const char *target;
-	LPOLESTR urlW = NULL;
-	LPOLESTR targetW = NULL;
+	const WCHAR *domain = context->Domain;
+	const WCHAR *url;
+	const WCHAR *target;
 
 	// expand all strings
 	if(!(context->Flags & TEST_DONT_EXEC)) {
 		Application.LockApacheEnv(READ_LOCK);
 		url = Application.ExpandEnvironmentStr(pTemp, uItem->Url, domain);
 		target = Application.ExpandEnvironmentStr(pTemp, uItem->Target, domain);
-		urlW = Application.ConvertString(codepage, url, -1);
-		targetW = Application.ConvertString(codepage, target, -1);
 		Application.UnlockApacheEnv(READ_LOCK);
 	}
 
 	if(ap_regexec(context->Pattern, "_app", 0, NULL, 0) == 0) {
 		// an application command
 		if(!(context->Flags & TEST_DONT_EXEC)) {
-			if(!target) target = "";
+			if(!target) target = L"";
 			WapacheWindow *win;
-			if(OpenUrl("_app", url, target, &win)) {
+			if(OpenUrl(L"_app", url, target, &win)) {
 				win->Release();
 			}
 		}
@@ -2713,16 +2664,13 @@ void WapacheWindow::ExecUrlCommand(WapacheExecContext *context, wa_menu_item_con
 
 		// set callback
 		NavigateToUrlParams p;
-		p.Target = targetW;
-		p.Url = urlW;
+		p.Target = target;
+		p.Url = url;
 		context->Function = NavigateToUrl;
 		context->Data = &p;
 
 		Broadcast(context);
 	}
-
-	SysFreeString(urlW);
-	SysFreeString(targetW);
 }
 
 void WapacheWindow::ExecUrlEnvCommand(WapacheExecContext *context, wa_menu_item_config *item)
@@ -2810,7 +2758,7 @@ HRESULT STDMETHODCALLTYPE WapacheWindow::ShowContextMenu(
 	wa_win_config *winSettings = Application.GetWindowSettings(Name);
 
 	if(winSettings) {
-		const char *menuName = NULL;
+		const WCHAR *menuName = NULL;
 		switch(dwID) {
 			case CONTEXT_MENU_DEFAULT: menuName = winSettings->DefaultMenu; break;
 			case CONTEXT_MENU_IMAGE: menuName = winSettings->ImageMenu; break;

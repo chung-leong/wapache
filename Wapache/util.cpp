@@ -199,7 +199,7 @@ LPOLESTR BuildRequestHeaderString(request_rec *r)
 	return h.str;
 }
 
-char *fragment(apr_pool_t *p, const char *s, ap_regmatch_t m) {
+WCHAR *fragment(apr_pool_t *p, const char *s, ap_regmatch_t m) {
 	if(m.rm_so < m.rm_eo) {
 		return apr_pstrndup(p, s + m.rm_so, m.rm_eo - m.rm_so);
 	}
@@ -209,7 +209,7 @@ char *fragment(apr_pool_t *p, const char *s, ap_regmatch_t m) {
 }
 
 
-bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCSTR s)
+bool ParseUrl(apr_pool_t *p, UrlComponents *url, const char *s)
 {
 	static ap_regex_t *url_parser_regex = NULL;
 	const char *re = "((\\w+)://(([^@:]*)(:([^@]*))?@)?([\\w.-]+)(:(\\d{0,5}))?)?(([^\\?\\*<>:\"]*)?(\\?([^#]+))?(#(.+))?)";
@@ -301,7 +301,7 @@ bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCSTR s)
 	return true;
 }
 
-bool ParseUrl(apr_pool_t *p, UrlComponents *url, LPCWSTR s) {
+bool ParseUrl(apr_pool_t *p, UrlComponents *url, const WCHAR *s) {
 	char *cstr = WideStringToPoolCStr(p, s, -1);
 	return ParseUrl(p, url, cstr);
 }
@@ -330,7 +330,7 @@ int chdir(const char *dir) {
 			buffer[i] = '\\';
 		}
 	}
-	return SetCurrentDirectory(buffer) ? 0 : -1;
+	return SetCurrentDirectoryA(buffer) ? 0 : -1;
 }
 
 bool GetProperty(IDispatch *disp, LPOLESTR name, VARIANT *pResult, VARTYPE type) {

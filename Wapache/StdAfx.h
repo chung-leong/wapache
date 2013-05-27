@@ -12,6 +12,7 @@
 
 #define WINVER 0x0500
 #define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define UNICODE
 
 #include <windows.h>
 #include <shellapi.h>

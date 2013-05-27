@@ -26,16 +26,16 @@ private:
 	WapacheTrayIcon *Prev;
 	WapacheTrayIcon *Next;
 
-	char *IconPath;
-	char *ToolTip;
-	char *CharSet;
-	char *Domain;
+	WCHAR *IconPath;
+	WCHAR *ToolTip;
+	WCHAR *CharSet;
+	WCHAR *Domain;
 	bool AutoExit;
-	char *LeftClickMenu;
+	WCHAR *LeftClickMenu;
 	int LeftClickItemIndex;
-	char *RightClickMenu;
+	WCHAR *RightClickMenu;
 	int RightClickItemIndex;
-	char *DoubleClickMenu;
+	WCHAR *DoubleClickMenu;
 	int DoubleClickItemIndex;
 
 	ULONG RefCount;
