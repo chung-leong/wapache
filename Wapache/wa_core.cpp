@@ -974,8 +974,13 @@ static apr_status_t wa_core_output_filter(ap_filter_t *f, apr_bucket_brigade *b)
 }
 
 
-static apr_port_t wa_core_default_port(const request_rec *r)
-    { return DEFAULT_HTTP_PORT; }
+static apr_port_t wa_core_default_port(const request_rec *r) { 
+	return DEFAULT_HTTP_PORT; 
+}
+
+static int wa_core_run(apr_pool_t *_pconf, apr_pool_t *plog, server_rec *s ) {
+    return OK;
+}
 
 static void register_hooks(apr_pool_t *p)
 {
@@ -994,6 +999,9 @@ static void register_hooks(apr_pool_t *p)
     ap_hook_fixups(core_override_type,NULL,NULL,APR_HOOK_REALLY_FIRST);
     ap_hook_access_checker(do_nothing,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_create_request(wa_core_create_req, NULL, NULL, APR_HOOK_MIDDLE);
+
+	// hook mpm so ap_check_mpm() returns true
+    ap_hook_mpm(wa_core_run, NULL, NULL, APR_HOOK_MIDDLE);
 
     ap_core_input_filter_handle =
         ap_register_input_filter("CORE_IN", wa_core_input_filter,

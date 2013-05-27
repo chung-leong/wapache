@@ -170,6 +170,7 @@ bool WapacheApplication::InitializeApache(void) {
 
 	// create the Process record
     rv = apr_pool_create(&pglobal, NULL);
+	ap_pglobal = pglobal;
 
 	if(rv != APR_SUCCESS) {
 		// need to call the function directly, since the hook is not set up yet
@@ -221,6 +222,9 @@ bool WapacheApplication::InitializeApache(void) {
 
 	// attach the error log hook
     ap_hook_error_log(wa_report_error,NULL,NULL,APR_HOOK_REALLY_LAST);
+
+	// run rewrite args hooks
+    ap_run_rewrite_args(Process);
 
 	// create UI config record
 	ClientConf = (wa_client_config *) apr_palloc(pconf, sizeof(wa_client_config));
