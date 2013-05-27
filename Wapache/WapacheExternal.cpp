@@ -226,12 +226,8 @@ HRESULT WapacheExternal::MessageBox(DISPPARAMS *pDispParams, VARIANT *pVarResult
 	if(SUCCEEDED(VariantChangeType(&msgV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&captionV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&flagsV, &argv[--i], 0, VT_I4))) {
-		char *msg = WideStringToCStr(V_BSTR(&msgV), -1);
-		char *caption = WideStringToCStr(V_BSTR(&captionV), -1);
 		int flags = V_I4(&flagsV);
-		int result = ::MessageBox(Window->Hwnd, msg, caption, flags);
-		delete[] msg;
-		delete[] caption;
+		int result = ::MessageBoxW(Window->Hwnd, V_BSTR(&msgV), V_BSTR(&captionV), flags);
 		if(pVarResult) {
 			V_VT(pVarResult) = VT_I4;
 			V_I4(pVarResult) = result;
@@ -374,26 +370,25 @@ HRESULT WapacheExternal::BrowseForFolder(DISPPARAMS *pDispParams, VARIANT *pVarR
 	int i = argc;
 	if(SUCCEEDED(VariantChangeType(&titleV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&flagsV, &argv[--i], 0, VT_I4))) {
-		char buffer[MAX_PATH];
-		BROWSEINFO bi;
+		WCHAR buffer[MAX_PATH];
+		BROWSEINFOW bi;
 		ZeroMemory(&bi, sizeof(bi));
 		bi.hwndOwner = Window->Hwnd;
 		if(V_VT(&argv[1]) != VT_BOOL) {
-			bi.lpszTitle = WideStringToCStr(V_BSTR(&titleV), -1);
+			bi.lpszTitle = V_BSTR(&titleV);
 		}
 		bi.ulFlags = V_I4(&flagsV);
 		bi.pszDisplayName = buffer;
 
 		V_VT(pVarResult) = VT_NULL;
 
-		LPITEMIDLIST pidl = ::SHBrowseForFolder(&bi);
+		LPITEMIDLIST pidl = ::SHBrowseForFolderW(&bi);
 		if(pidl) {
-			if(SHGetPathFromIDList(pidl, buffer)) {
+			if(SHGetPathFromIDListW(pidl, buffer)) {
 				V_VT(pVarResult) = VT_BSTR;
-				V_BSTR(pVarResult) = CStrToWideString(buffer, -1);
+				V_BSTR(pVarResult) = SysAllocString(buffer);
 			}
 		}
-		delete[] (char *) bi.lpszTitle;
 	}
 	else {
 		*puArgErr = i;
@@ -424,50 +419,46 @@ HRESULT WapacheExternal::GetOpenFileName(DISPPARAMS *pDispParams, VARIANT *pVarR
 	if(SUCCEEDED(VariantChangeType(&titleV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&filePathV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&filterV, &argv[--i], 0, VT_BSTR))) {
-		char originalPath[MAX_PATH + 1];
-		char fileBuffer[MAX_PATH + 1];
-		OPENFILENAME ofn;
+		WCHAR originalPath[MAX_PATH + 1];
+		WCHAR fileBuffer[MAX_PATH + 1];
+		OPENFILENAMEW ofn;
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = Window->Hwnd;
 		ofn.hInstance = _hinstance;
 		ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_ENABLESIZING;
 		if(V_VT(&argv[2]) != VT_BOOL) {
-			ofn.lpstrTitle = WideStringToCStr(V_BSTR(&titleV), -1);
+			ofn.lpstrTitle = V_BSTR(&titleV);
 		}
 		ZeroMemory(fileBuffer, sizeof(fileBuffer));
 		if(V_VT(&argv[1]) != VT_BOOL) {
-			char *path = WideStringToCStr(V_BSTR(&filePathV), -1);
-			strncpy(fileBuffer, path, MAX_PATH);
-			delete[] path;
+			wcsncpy(fileBuffer, V_BSTR(&filePathV), MAX_PATH);
 		}
 		ofn.lpstrFile = fileBuffer;
 		ofn.nMaxFile = MAX_PATH + 1;
 		if(V_VT(&argv[0]) != VT_BOOL) {
-			LPOLESTR filterW = V_BSTR(&filterV);
-			int len = (int) wcslen(filterW);
-			char *filter = new char[len + 2];
-			for(int i = 0; filterW[i] != '\0'; i++) {
-				if(filterW[i] == '|') {
-					filter[i] = '\0';
+			BSTR filter = V_BSTR(&filterV);
+			int len = (int) wcslen(filter);
+			WCHAR *filterList = new WCHAR[len + 2];
+			for(int i = 0; filter[i] != '\0'; i++) {
+				if(filter[i] == '|') {
+					filterList[i] = '\0';
 				}
 				else {
-					filter[i] = (char) filterW[i];
+					filterList[i] = filter[i];
 				}
 			}
-			filter[len] = '\0';
-			filter[len + 1] = '\0';
-			ofn.lpstrFilter = filter;
+			filterList[len] = '\0';
+			filterList[len + 1] = '\0';
+			ofn.lpstrFilter = filterList;
 		}
-		GetCurrentDirectory(sizeof(originalPath), originalPath);
-		if(::GetOpenFileName(&ofn)) {
+		GetCurrentDirectoryW(sizeof(originalPath), originalPath);
+		if(::GetOpenFileNameW(&ofn)) {
 			V_VT(pVarResult) = VT_BSTR;
-			V_BSTR(pVarResult) = CStrToWideString(fileBuffer, -1);
+			V_BSTR(pVarResult) = SysAllocString(fileBuffer);
 		}
-		SetCurrentDirectory(originalPath);
-
-		delete[] (char *) ofn.lpstrTitle;
-		delete[] (char *) ofn.lpstrFilter;
+		SetCurrentDirectoryW(originalPath);
+		delete[] (WCHAR *) ofn.lpstrFilter;
 	}
 	else {
 		*puArgErr = i;
@@ -496,27 +487,27 @@ HRESULT WapacheExternal::GetSaveFileName(DISPPARAMS *pDispParams, VARIANT *pVarR
 	if(SUCCEEDED(VariantChangeType(&titleV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&filePathV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&filterV, &argv[--i], 0, VT_BSTR))) {
-		char originalPath[MAX_PATH + 1];
-		char fileBuffer[MAX_PATH + 1];
-		char initialFolder[MAX_PATH + 1];
-		OPENFILENAME ofn;
+		WCHAR originalPath[MAX_PATH + 1];
+		WCHAR fileBuffer[MAX_PATH + 1];
+		WCHAR initialFolder[MAX_PATH + 1];
+		OPENFILENAMEW ofn;
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = Window->Hwnd;
 		ofn.hInstance = _hinstance;
 		ofn.Flags = OFN_EXPLORER | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_ENABLESIZING;
 		if(V_VT(&argv[2]) != VT_BOOL) {
-			ofn.lpstrTitle = WideStringToCStr(V_BSTR(&titleV), -1);
+			ofn.lpstrTitle = V_BSTR(&titleV);
 		}
 		ZeroMemory(fileBuffer, sizeof(fileBuffer));
 		ZeroMemory(initialFolder, sizeof(initialFolder));
 		if(V_VT(&argv[1]) != VT_BOOL) {
-			char *path = WideStringToCStr(V_BSTR(&filePathV), -1);
-			char *slash = strrchr(path, '\\');
+			WCHAR *path = V_BSTR(&filePathV);
+			WCHAR *slash = wcsrchr(path, '\\');
 			if(slash) {
 				*slash = '\0';
-				strncpy(fileBuffer, slash + 1, MAX_PATH);
-				strncpy(initialFolder, path, MAX_PATH);
+				wcsncpy(fileBuffer, slash + 1, MAX_PATH);
+				wcsncpy(initialFolder, path, MAX_PATH);
 			}
 			delete[] path;
 		}
@@ -524,30 +515,29 @@ HRESULT WapacheExternal::GetSaveFileName(DISPPARAMS *pDispParams, VARIANT *pVarR
 		ofn.lpstrInitialDir = initialFolder;
 		ofn.nMaxFile = MAX_PATH + 1;
 		if(V_VT(&argv[0]) != VT_BOOL) {
-			LPOLESTR filterW = V_BSTR(&filterV);
-			int len = (int) wcslen(filterW);
-			char *filter = new char[len + 2];
-			for(int i = 0; filterW[i] != '\0'; i++) {
-				if(filterW[i] == '|') {
-					filter[i] = '\0';
+			BSTR filter = V_BSTR(&filterV);
+			int len = (int) wcslen(filter);
+			WCHAR *filterList = new WCHAR[len + 2];
+			for(int i = 0; filter[i] != '\0'; i++) {
+				if(filter[i] == '|') {
+					filterList[i] = '\0';
 				}
 				else {
-					filter[i] = (char) filterW[i];
+					filterList[i] = filter[i];
 				}
 			}
-			filter[len] = '\0';
-			filter[len + 1] = '\0';
-			ofn.lpstrFilter = filter;
+			filterList[len] = '\0';
+			filterList[len + 1] = '\0';
+			ofn.lpstrFilter = filterList;
 		}
-		GetCurrentDirectory(sizeof(originalPath), originalPath);
-		if(::GetSaveFileName(&ofn)) {
+		GetCurrentDirectoryW(sizeof(originalPath), originalPath);
+		if(::GetSaveFileNameW(&ofn)) {
 			V_VT(pVarResult) = VT_BSTR;
-			V_BSTR(pVarResult) = CStrToWideString(fileBuffer, -1);
+			V_BSTR(pVarResult) = SysAllocString(fileBuffer);
 		}
-		SetCurrentDirectory(originalPath);
+		SetCurrentDirectoryW(originalPath);
 
-		delete[] (char *) ofn.lpstrTitle;
-		delete[] (char *) ofn.lpstrFilter;
+		delete[] (WCHAR *) ofn.lpstrFilter;
 	}
 	else {
 		*puArgErr = i;
@@ -675,15 +665,7 @@ HRESULT WapacheExternal::ShellExecute(DISPPARAMS *pDispParams, VARIANT *pVarResu
 	int i = argc;
 	if(SUCCEEDED(VariantChangeType(&operationV, &argv[--i], 0, VT_BSTR))
 	&& SUCCEEDED(VariantChangeType(&fileV, &argv[--i], 0, VT_BSTR))) {
-		char *operation = NULL;
-		char *file = NULL;
-
-		if(V_VT(&argv[1]) != VT_BOOL) {
-			operation = WideStringToCStr(V_BSTR(&operationV), -1);
-		}
-		file = WideStringToCStr(V_BSTR(&fileV), -1);
-
-		HINSTANCE result = ::ShellExecute(Window->Hwnd, operation, file, NULL, NULL, SW_SHOWNORMAL);
+		HINSTANCE result = ::ShellExecuteW(Window->Hwnd, (V_VT(&argv[1]) != VT_BOOL) ? V_BSTR(&operationV) : NULL, V_BSTR(&fileV), NULL, NULL, SW_SHOWNORMAL);
 		if((int) result > 32) {
 			V_VT(pVarResult) = VT_BOOL;
 			V_BOOL(pVarResult) = TRUE;
@@ -692,9 +674,6 @@ HRESULT WapacheExternal::ShellExecute(DISPPARAMS *pDispParams, VARIANT *pVarResu
 			V_VT(pVarResult) = VT_BOOL;
 			V_BOOL(pVarResult) = FALSE;
 		}
-
-		delete[] operation;
-		delete[] file;
 	}
 	else {
 		*puArgErr = i;
