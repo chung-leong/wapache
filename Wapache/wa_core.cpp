@@ -976,6 +976,25 @@ static apr_status_t wa_core_output_filter(ap_filter_t *f, apr_bucket_brigade *b)
     return APR_SUCCESS;
 }
 
+static apr_status_t wa_sub_req_output_filter(ap_filter_t *f, apr_bucket_brigade *bb)
+{
+    apr_bucket *e = APR_BRIGADE_LAST(bb);
+
+    if (APR_BUCKET_IS_EOS(e)) {
+        apr_bucket_delete(e);
+    }
+
+    if (!APR_BRIGADE_EMPTY(bb)) {
+        return ap_pass_brigade(f->next, bb);
+    }
+
+    return APR_SUCCESS;
+}
+
+static const char *wa_core_http_scheme(const request_rec *r)
+{ 
+	return "http"; 
+}
 
 static apr_port_t wa_core_default_port(const request_rec *r)
 { 
@@ -998,6 +1017,7 @@ static void register_hooks(apr_pool_t *p)
     ap_hook_post_config(wa_core_post_config,NULL,NULL,APR_HOOK_REALLY_FIRST);
     ap_hook_translate_name(wa_core_translate,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_map_to_storage(wa_core_map_to_storage,NULL,NULL,APR_HOOK_REALLY_LAST);
+	ap_hook_http_scheme(wa_core_http_scheme,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_default_port(wa_core_default_port,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_handler(wa_default_handler,NULL,NULL,APR_HOOK_REALLY_LAST);
     ap_hook_type_checker(do_nothing,NULL,NULL,APR_HOOK_REALLY_LAST);
@@ -1019,9 +1039,9 @@ static void register_hooks(apr_pool_t *p)
     ap_core_output_filter_handle =
         ap_register_output_filter("CORE", wa_core_output_filter,
                                   NULL, AP_FTYPE_NETWORK);
-    //ap_subreq_core_filter_handle =
-    //   ap_register_output_filter("SUBREQ_CORE", wa_sub_req_output_filter,
-    //                             NULL, AP_FTYPE_CONTENT_SET);
+    ap_subreq_core_filter_handle =
+       ap_register_output_filter("SUBREQ_CORE", wa_sub_req_output_filter,
+                                 NULL, AP_FTYPE_CONTENT_SET);
     ap_old_write_func =
         ap_register_output_filter("OLD_WRITE", ap_old_write_filter,
                                   NULL, (ap_filter_type) 0);
