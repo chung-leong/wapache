@@ -959,6 +959,7 @@ bool WapacheApplication::AddScriptMenuItems(HMENU hMenu, VARIANT *items, UINT *p
 	if(V_VT(items) == VT_DISPATCH) {
 		HRESULT hr;
 		IDispatch *disp = V_DISPATCH(items);
+		IEnumVARIANT *enumVar = NULL;
 		DISPPARAMS dispParams;
 		dispParams.cArgs = 0;
 		dispParams.cNamedArgs = 0;
@@ -967,62 +968,65 @@ bool WapacheApplication::AddScriptMenuItems(HMENU hMenu, VARIANT *items, UINT *p
 		hr = disp->Invoke(DISPID_NEWENUM, IID_NULL, 0x0409, DISPATCH_PROPERTYGET, &dispParams, &ret, NULL, NULL);
 		if(hr == S_OK) {
 			IUnknown *enumUnk = V_UNKNOWN(&ret);
-			IEnumVARIANT *enumVar;
 			hr = enumUnk->QueryInterface(&enumVar);
-			if(hr == S_OK) {
-				int index = GetMenuItemCount(hMenu);
-				VARIANT item;
-				VariantInit(&item);
-				while(enumVar->Next(1, &item, NULL) == S_OK) {
-					MENUITEMINFO mii;
-					ZeroMemory(&mii, sizeof(mii));
-					mii.cbSize = sizeof(mii);
-					if(V_VT(&item) == VT_DISPATCH) {
-						IDispatch *itemDisp = V_DISPATCH(&item);
-						// get the label
-						VARIANT label, menu, radio;
-						VariantInit(&label);
-						VariantInit(&menu);
-						VariantInit(&radio);
-						mii.fMask |= MIIM_FTYPE | MIIM_STRING;
-						mii.fType = MFT_STRING;
-						if(GetProperty(itemDisp, L"label", &label, VT_BSTR)) {
-							mii.dwTypeData = WideStringToCStr(V_BSTR(&label), -1);
-							VariantClear(&label);
-						} else {
-							mii.dwTypeData = WideStringToCStr(L"undefined", -1);
-						}
-						if(GetProperty(itemDisp, L"menu", &menu, VT_DISPATCH)) {
-							mii.hSubMenu = CreatePopupMenu();
-							mii.fMask |= MIIM_SUBMENU;
-							AddScriptMenuItems(mii.hSubMenu, &menu, pId);
-							VariantClear(&menu);
-						} else {
-							mii.fMask |= MIIM_ID | MIIM_DATA;
-							mii.wID = (*pId)++;
-
-							if(GetProperty(itemDisp, L"radio", &radio, VT_BOOL)) {
-								mii.fType |= MFT_RADIOCHECK;
-								VariantClear(&radio);
-							}
-
-							// save a reference to item
-							mii.dwItemData = (ULONG_PTR) itemDisp;
-							itemDisp->AddRef();
-						}
-					} else if(V_VT(&item) == VT_BSTR && wcscmp(V_BSTR(&item), L"-") == 0) {
-						mii.fMask |= MIIM_FTYPE | MIIM_DATA;
-						mii.fType = MFT_SEPARATOR;
-					}
-					if(mii.fMask) {
-						InsertMenuItem(hMenu, index++, TRUE, &mii);
-						delete[] mii.dwTypeData;
-					}
-					VariantClear(&item);
-				}
-				enumVar->Release();
-			}
 			VariantClear(&ret);
+		} else {
+			// need to do this for IE9
+			hr = disp->QueryInterface(&enumVar);
+		}
+		if(enumVar) {
+			int index = GetMenuItemCount(hMenu);
+			VARIANT item;
+			VariantInit(&item);
+			// IEnumVARIANT::Next() might return E_FAIL even when it retrieves the item correctly
+			while(hr = enumVar->Next(1, &item, NULL), V_VT(&item) != VT_EMPTY) {
+				MENUITEMINFO mii;
+				ZeroMemory(&mii, sizeof(mii));
+				mii.cbSize = sizeof(mii);
+				if(V_VT(&item) == VT_DISPATCH) {
+					IDispatch *itemDisp = V_DISPATCH(&item);
+					// get the label
+					VARIANT label, menu, radio;
+					VariantInit(&label);
+					VariantInit(&menu);
+					VariantInit(&radio);
+					mii.fMask |= MIIM_FTYPE | MIIM_STRING;
+					mii.fType = MFT_STRING;
+					if(GetProperty(itemDisp, L"label", &label, VT_BSTR)) {
+						mii.dwTypeData = WideStringToCStr(V_BSTR(&label), -1);
+						VariantClear(&label);
+					} else {
+						mii.dwTypeData = WideStringToCStr(L"undefined", -1);
+					}
+					if(GetProperty(itemDisp, L"menu", &menu, VT_DISPATCH)) {
+						mii.hSubMenu = CreatePopupMenu();
+						mii.fMask |= MIIM_SUBMENU;
+						AddScriptMenuItems(mii.hSubMenu, &menu, pId);
+						VariantClear(&menu);
+					} else {
+						mii.fMask |= MIIM_ID | MIIM_DATA;
+						mii.wID = (*pId)++;
+
+						if(GetProperty(itemDisp, L"radio", &radio, VT_BOOL)) {
+							mii.fType |= MFT_RADIOCHECK;
+							VariantClear(&radio);
+						}
+
+						// save a reference to item
+						mii.dwItemData = (ULONG_PTR) itemDisp;
+						itemDisp->AddRef();
+					}
+				} else if(V_VT(&item) == VT_BSTR && wcscmp(V_BSTR(&item), L"-") == 0) {
+					mii.fMask |= MIIM_FTYPE | MIIM_DATA;
+					mii.fType = MFT_SEPARATOR;
+				}
+				if(mii.fMask) {
+					InsertMenuItem(hMenu, index++, TRUE, &mii);
+					delete[] mii.dwTypeData;
+				}
+				VariantClear(&item);
+			}
+			enumVar->Release();
 		}
 	}
 	return TRUE;
