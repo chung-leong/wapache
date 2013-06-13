@@ -28,6 +28,7 @@ WapacheProtocol::WapacheProtocol(IUnknown *pUnk)
 	Charset = "iso-8859-1";
 	Browser = NULL;
 	AttachmentFilename = NULL;
+	ContentType = NULL;
 
 	BB = NULL;
 	AvailData = NULL;
@@ -449,8 +450,12 @@ HRESULT STDMETHODCALLTYPE WapacheProtocol::QueryInfo(
 			*pDword = HttpStatusCode;
 			break;
 		case HTTP_QUERY_CONTENT_TYPE:
-			apr_cpystrn(pChar, ContentType, *pcbBuf);
-			*pcbBuf = min(strlen(ContentType) + 1, *pcbBuf);
+			if(ContentType) {
+				apr_cpystrn(pChar, ContentType, *pcbBuf);
+				*pcbBuf = min(strlen(ContentType) + 1, *pcbBuf);
+			} else {
+				*pcbBuf = 0;
+			}
 			break;
 		case HTTP_QUERY_LAST_MODIFIED:
 			CopyMemory(pSystemTime, &LastModifiedTime, sizeof(LastModifiedTime));

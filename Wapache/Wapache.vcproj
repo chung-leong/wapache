@@ -123,7 +123,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../httpd/include;../httpd/srclib/apr/include;../httpd/srclib/apr/include/arch;../httpd/srclib/apr/include/arch/win32;&quot;../httpd/srclib/apr-util/include&quot;;../httpd/os/win32;../httpd/mpm/winnt"
+				AdditionalIncludeDirectories="../httpd/include;../httpd/srclib/apr/include;../httpd/srclib/apr/include/arch;../httpd/srclib/apr/include/arch/win32;&quot;../httpd/srclib/apr-util/include&quot;;../httpd/os/win32;../httpd/mpm/winnt;../apr/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib comsupp.lib comctl32.lib Urlmon.lib wininet.lib ..\httpd\srclib\apr\Release\libapr.lib ..\httpd\srclib\apr-iconv\Release\libapriconv.lib ..\httpd\srclib\apr-util\Release\libaprutil.lib ..\httpd\Release\libhttpd.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib comsupp.lib comctl32.lib Urlmon.lib wininet.lib ..\httpd\srclib\apr\Release\libapr-1.lib ..\httpd\srclib\apr-iconv\Release\libapriconv-1.lib ..\httpd\srclib\apr-util\Release\libaprutil-1.lib ..\httpd\Release\libhttpd.lib"
 				OutputFile="$(OutDir)/Wapache.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"

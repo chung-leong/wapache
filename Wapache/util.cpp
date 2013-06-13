@@ -180,9 +180,6 @@ LPOLESTR BuildResponseHeaderString(request_rec *r)
 	__concat_header(&h, "Content-Type", r->content_type);
 	h.len += MultiByteToWideChar(CP_ACP, 0, "\r\n", -1, h.str + h.len, h.buf_len - h.len) - 1;
 
-	wchar_t buffer[1024];
-	wcscpy(buffer, h.str);
-
 	return h.str;
 }
 

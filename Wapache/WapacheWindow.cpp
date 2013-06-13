@@ -774,6 +774,9 @@ void WapacheWindow::OnCreate(CREATESTRUCT *c)
 			Browser->put_RegisterAsBrowser(FALSE);
 			hr = Control->QueryInterface(&InPlaceObject);
 
+			// whether to disable dialog boxes
+			hr = Browser->put_Silent(TRUE);
+
 			IConnectionPointContainer *cpc;
 			hr = Browser->QueryInterface(&cpc);
 			if(hr == S_OK) {

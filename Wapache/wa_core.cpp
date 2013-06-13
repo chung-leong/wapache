@@ -653,6 +653,10 @@ static int wa_core_input_filter(ap_filter_t *f, apr_bucket_brigade *b,
 	wa_conn_rec *wc = (wa_conn_rec *) net->c;
 	WapacheProtocol *proto = (WapacheProtocol *) wc->object;
 
+	if(!proto) {
+		return DECLINED;
+	}
+
     if (mode == AP_MODE_INIT) {
         /*
          * this mode is for filters that might need to 'initialize'
@@ -855,6 +859,10 @@ static apr_status_t wa_http_header_filter(ap_filter_t *f, apr_bucket_brigade *b)
 	wa_conn_rec *wc = (wa_conn_rec *) c;
 	WapacheProtocol *proto = (WapacheProtocol *) wc->object;
 
+	if(!proto) {
+		return DECLINED;
+	}
+
 	for(e = APR_BRIGADE_FIRST(b); e != APR_BRIGADE_SENTINEL(b);	e = APR_BUCKET_NEXT(e)) {
         if (e->type == &ap_bucket_type_error) {
             ap_bucket_error *eb = (ap_bucket_error *) e->data;
@@ -963,6 +971,10 @@ static apr_status_t wa_core_output_filter(ap_filter_t *f, apr_bucket_brigade *b)
     core_output_filter_ctx_t *ctx = net->out_ctx;
 	wa_conn_rec *wc = (wa_conn_rec *) c;
 	WapacheProtocol *proto = (WapacheProtocol *) wc->object;
+
+	if(!proto) {
+		return DECLINED;
+	}
 
     if (ctx == NULL) {
         ctx = (core_output_filter_ctx_t *) apr_pcalloc(c->pool, sizeof(*ctx));
